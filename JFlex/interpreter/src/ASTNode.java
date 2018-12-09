@@ -62,6 +62,8 @@ public class ASTNode {
                 ASTNode condExpr = args.pop();
                 return new WhileNode(condExpr, doBlock);
             }
+            case "!":
+                return new NotNode(args.pop());
         }
         return null;
     }
@@ -118,7 +120,7 @@ class BoolNode extends ASTNode {
 
     @Override
     public String toString() {
-        return "<BoolNode> " + (val ? "True" : "False");
+        return "<BoolNode> " + (val ? "true" : "false");
     }
 }
 
@@ -259,4 +261,20 @@ class SequenceNode extends ASTNode {
     public String toString() {
         return "<SequenceNode>";
     }
+}
+
+class StmtSeq extends ASTNode {
+    ArrayList<ASTNode> statements;
+
+    public StmtSeq() {
+        statements = new ArrayList<>();
+    }
+
+    public void add(ASTNode stmt) {
+        statements.add(stmt);
+    }
+}
+
+class BlockBegin extends ASTNode {
+
 }

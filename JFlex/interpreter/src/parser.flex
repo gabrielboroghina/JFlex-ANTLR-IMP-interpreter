@@ -13,16 +13,18 @@ import java.util.*;
     public AST syntaxTree;
 
     private void pushStmtNode(ASTNode node) {
-        if (!nodesStack.empty() && (nodesStack.peek() instanceof SequenceNode ||
+        /*if (!nodesStack.empty() && (nodesStack.peek() instanceof SequenceNode ||
                                     nodesStack.peek() instanceof IfNode ||
                                     nodesStack.peek() instanceof WhileNode ||
                                     nodesStack.peek() instanceof AssignmentNode ||
                                     nodesStack.peek() instanceof BlockNode)) {
-            // compress successive Stmt nodes
             ASTNode top = nodesStack.pop();
-            nodesStack.push(new SequenceNode(top, node));
-        }
-        else nodesStack.push(node);
+            StmtSeq stmtSeq = new StmtSeq();
+            stmtSeq.add(top);
+            stmtSeq.add(node);
+            nodesStack.push(stmtSeq);
+        } else*/
+        nodesStack.push(node);
     }
 
     private void pushBlockNode(BlockNode block) {
@@ -53,6 +55,14 @@ import java.util.*;
 %init}
 
 %eof{
+    // compress stmt nodes using Sequence Nodes
+    while (nodesStack.size() > 1) {
+        ASTNode top = nodesStack.pop();
+        ASTNode top2 = nodesStack.pop();
+
+        nodesStack.push(new SequenceNode(top2, top));
+    }
+
     syntaxTree.root.setSon(0, nodesStack.peek());
 %eof}
 
@@ -115,7 +125,9 @@ int
 
 &&
 {
-    while (!operatorStack.empty() && (operatorStack.peek().equals("!") || operatorStack.peek().equals("&&"))) {
+    while (!operatorStack.empty() && (operatorStack.peek().equals("!") ||
+                                      operatorStack.peek().equals("&&") ||
+                                      operatorStack.peek().equals(">"))) {
         String op = operatorStack.pop();
         nodesStack.push(ASTNode.buildNode(op, nodesStack));
     }
@@ -124,11 +136,19 @@ int
 
 >
 {
+    while (!operatorStack.empty() && (operatorStack.peek().equals("+") || operatorStack.peek().equals("/"))) {
+        String op = operatorStack.pop();
+        nodesStack.push(ASTNode.buildNode(op, nodesStack));
+    }
     operatorStack.push(">");
 }
 
 \!
 {
+    while (!operatorStack.empty() && operatorStack.peek().equals(">")) {
+        String op = operatorStack.pop();
+        nodesStack.push(ASTNode.buildNode(op, nodesStack));
+    }
     operatorStack.push("!");
 }
 
@@ -137,7 +157,11 @@ int
     pushBlockNode(new BlockNode());
 }
 
-\{ { operatorStack.push("{"); }
+\{
+{
+    operatorStack.push("{");
+    nodesStack.push(new BlockBegin()); // mark the beginning of a block
+}
 
 \}
 {
@@ -147,7 +171,16 @@ int
     }
 
     operatorStack.pop(); // delete '{' from the stack
-    pushBlockNode(new BlockNode(nodesStack.pop()));
+
+    ASTNode blockContent = nodesStack.pop();
+    // compress stmt nodes using Sequence Nodes
+    while (!(nodesStack.peek() instanceof BlockBegin)) {
+        ASTNode top = nodesStack.pop();
+        blockContent = new SequenceNode(top, blockContent);
+    }
+    nodesStack.pop(); // pop BlockBegin node
+
+    pushBlockNode(new BlockNode(blockContent));
 }
 
 = { operatorStack.push("="); }
