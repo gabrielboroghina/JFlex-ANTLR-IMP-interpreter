@@ -11,6 +11,39 @@ import java.util.*;
     private Stack<String> operatorStack;
     private Stack<ASTNode> nodesStack;
     public AST syntaxTree;
+
+    private void pushStmtNode(ASTNode node) {
+        if (!nodesStack.empty() && (nodesStack.peek() instanceof SequenceNode ||
+                                    nodesStack.peek() instanceof IfNode ||
+                                    nodesStack.peek() instanceof WhileNode ||
+                                    nodesStack.peek() instanceof AssignmentNode ||
+                                    nodesStack.peek() instanceof BlockNode)) {
+            // compress successive Stmt nodes
+            ASTNode top = nodesStack.pop();
+            nodesStack.push(new SequenceNode(top, node));
+        }
+        else nodesStack.push(node);
+    }
+
+    private void pushBlockNode(BlockNode block) {
+        if (!operatorStack.empty() && operatorStack.peek().equals("else")) {
+            // this was an else block
+            // build the if node
+            operatorStack.pop(); // pop else
+            operatorStack.pop(); // pop if
+            nodesStack.push(block);
+            pushStmtNode(ASTNode.buildNode("if", nodesStack));
+        } else if (!operatorStack.empty() && operatorStack.peek().equals("while")) {
+            // this was a (while) do block
+            // build the while node
+            operatorStack.pop(); // pop while
+            nodesStack.push(block);
+            pushStmtNode(ASTNode.buildNode("while", nodesStack));
+        } else {
+            // simple block node
+            pushStmtNode(block);
+        }
+    }
 %}
 
 %init{
@@ -32,7 +65,11 @@ Var = [a-z]+
 
 {BVal} { nodesStack.push(new BoolNode(Boolean.parseBoolean(yytext()))); }
 
-else {}
+if { operatorStack.push("if"); }
+
+while { operatorStack.push("while"); }
+
+else { operatorStack.push("else"); }
 
 int
 {
@@ -66,15 +103,21 @@ int
 \( { operatorStack.push("("); }
 
 \)
-{ // TODO
+{
+    while (!operatorStack.empty() && !operatorStack.peek().equals("(")) {
+        String op = operatorStack.pop();
+        nodesStack.push(ASTNode.buildNode(op, nodesStack));
+    }
 
+    operatorStack.pop(); // pop the opening bracket '('
+    nodesStack.push(new BracketNode(nodesStack.pop()));
 }
 
 &&
 {
     while (!operatorStack.empty() && (operatorStack.peek().equals("!") || operatorStack.peek().equals("&&"))) {
-        operatorStack.pop();
-        nodesStack.push(ASTNode.buildNode("&&", nodesStack));
+        String op = operatorStack.pop();
+        nodesStack.push(ASTNode.buildNode(op, nodesStack));
     }
     operatorStack.push("&&");
 }
@@ -89,7 +132,10 @@ int
     operatorStack.push("!");
 }
 
-\{\} { nodesStack.push(new BlockNode()); }
+\{\}
+{
+    pushBlockNode(new BlockNode());
+}
 
 \{ { operatorStack.push("{"); }
 
@@ -99,14 +145,12 @@ int
         String op = operatorStack.pop();
         nodesStack.push(ASTNode.buildNode(op, nodesStack));
     }
+
     operatorStack.pop(); // delete '{' from the stack
+    pushBlockNode(new BlockNode(nodesStack.pop()));
 }
 
 = { operatorStack.push("="); }
-
-if\s*\( { operatorStack.push("if"); }
-
-while\s*\( { operatorStack.push("while"); }
 
 ;
 {
@@ -121,20 +165,11 @@ while\s*\( { operatorStack.push("while"); }
         syntaxTree.root = new MainNode();
 
         while (!nodesStack.empty())
-            syntaxTree.root.varList.put(((VarNode) nodesStack.pop()).name, null);
+            syntaxTree.root.declareVar(((VarNode) nodesStack.pop()).name);
     } else { // ;
         ASTNode assignmentNode = ASTNode.buildNode("=", nodesStack);
-        if (!nodesStack.empty() && (nodesStack.peek() instanceof SequenceNode ||
-                                    nodesStack.peek() instanceof IfNode ||
-                                    nodesStack.peek() instanceof WhileNode ||
-                                    nodesStack.peek() instanceof AssignmentNode ||
-                                    nodesStack.peek() instanceof BlockNode)) {
-            // compress successive stmt nodes
-            ASTNode top = nodesStack.pop();
-            nodesStack.push(new SequenceNode(top, assignmentNode));
-        }
-        else nodesStack.push(assignmentNode);
+        pushStmtNode(assignmentNode);
     }
 }
 
-
+\s+|, {}

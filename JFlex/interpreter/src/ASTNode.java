@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -40,17 +41,51 @@ public class ASTNode {
                 ASTNode left = args.pop();
                 return new AssignmentNode(left, right);
             }
+            case "&&": {
+                ASTNode right = args.pop();
+                ASTNode left = args.pop();
+                return new AndNode(left, right);
+            }
+            case ">": {
+                ASTNode right = args.pop();
+                ASTNode left = args.pop();
+                return new GreaterNode(left, right);
+            }
+            case "if": {
+                ASTNode elseBlock = args.pop();
+                ASTNode thenBlock = args.pop();
+                ASTNode condExpr = args.pop();
+                return new IfNode(condExpr, thenBlock, elseBlock);
+            }
+            case "while": {
+                ASTNode doBlock = args.pop();
+                ASTNode condExpr = args.pop();
+                return new WhileNode(condExpr, doBlock);
+            }
         }
         return null;
     }
 }
 
 class MainNode extends ASTNode {
-    HashMap<String, Integer> varList;
+    /**
+     * the ordered variables list
+     */
+    ArrayList<String> varList;
+    /**
+     * the mappings between a variable and its value
+     */
+    HashMap<String, Integer> vars;
 
     public MainNode() {
         super(1);
-        varList = new HashMap<>();
+        varList = new ArrayList<>();
+        vars = new HashMap<>();
+    }
+
+    public void declareVar(String varName) {
+        varList.add(varName);
+        vars.put(varName, null);
     }
 
     @Override
@@ -89,12 +124,10 @@ class BoolNode extends ASTNode {
 
 class VarNode extends ASTNode {
     String name;
-    Integer val;
 
     public VarNode(String name) {
         super(0);
         this.name = name;
-        val = null;
     }
 
     @Override
@@ -126,8 +159,8 @@ class DivNode extends ASTNode {
 }
 
 class BracketNode extends ASTNode {
-    public BracketNode() {
-        super(1);
+    public BracketNode(ASTNode expr) {
+        super(expr);
     }
 
     @Override
@@ -137,8 +170,8 @@ class BracketNode extends ASTNode {
 }
 
 class AndNode extends ASTNode {
-    public AndNode() {
-        super(2);
+    public AndNode(ASTNode left, ASTNode right) {
+        super(left, right);
     }
 
     @Override
@@ -148,8 +181,8 @@ class AndNode extends ASTNode {
 }
 
 class GreaterNode extends ASTNode {
-    public GreaterNode() {
-        super(2);
+    public GreaterNode(ASTNode left, ASTNode right) {
+        super(left, right);
     }
 
     @Override
@@ -159,8 +192,8 @@ class GreaterNode extends ASTNode {
 }
 
 class NotNode extends ASTNode {
-    public NotNode() {
-        super(1);
+    public NotNode(ASTNode bExpr) {
+        super(bExpr);
     }
 
     @Override
@@ -185,6 +218,10 @@ class BlockNode extends ASTNode {
         super(0);
     }
 
+    public BlockNode(ASTNode stmt) {
+        super(stmt);
+    }
+
     @Override
     public String toString() {
         return "<BlockNode> {}";
@@ -192,8 +229,8 @@ class BlockNode extends ASTNode {
 }
 
 class IfNode extends ASTNode {
-    public IfNode() {
-        super(3);
+    public IfNode(ASTNode condExpr, ASTNode thenBlock, ASTNode elseBlock) {
+        super(condExpr, thenBlock, elseBlock);
     }
 
     @Override
@@ -203,8 +240,8 @@ class IfNode extends ASTNode {
 }
 
 class WhileNode extends ASTNode {
-    public WhileNode() {
-        super(2);
+    public WhileNode(ASTNode condExpr, ASTNode doBlock) {
+        super(condExpr, doBlock);
     }
 
     @Override
