@@ -15,27 +15,23 @@ class IMPParser {
    */
   public static final int YYEOF = -1;
 
-  /**
-   * initial size of the lookahead buffer
-   */
+  /** initial size of the lookahead buffer */
   private static final int ZZ_BUFFERSIZE = 16384;
 
-  /**
-   * lexical states
-   */
+  /** lexical states */
   public static final int YYINITIAL = 0;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
    * ZZ_LEXSTATE[l+1] is the state in the DFA for the lexical state l
-   * at the beginning of a line
+   *                  at the beginning of a line
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = {
           0, 0
   };
 
-  /**
+  /** 
    * Translates characters to character classes
    */
   private static final String ZZ_CMAP_PACKED =
@@ -47,24 +43,24 @@ class IMPParser {
                   "\1\33\u097f\0\13\33\35\0\2\33\5\0\1\33\57\0\1\33\u0fa0\0" +
                   "\1\33\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\ud00f\0";
 
-  /**
+  /** 
    * Translates characters to character classes
    */
   private static final char[] ZZ_CMAP = zzUnpackCMap(ZZ_CMAP_PACKED);
 
-  /**
+  /** 
    * Translates DFA states to action switch labels.
    */
   private static final int[] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-          "\1\0\1\1\2\2\6\3\1\4\1\5\1\6\1\7" +
-                  "\1\1\1\10\1\11\1\12\1\13\1\14\1\15\2\16" +
-                  "\3\3\1\17\2\3\1\20\1\21\3\3\1\22\1\3" +
-                  "\1\23\1\24\1\3\1\25";
+          "\1\0\2\1\6\2\1\3\1\4\1\5\1\6\1\0" +
+                  "\1\7\1\10\1\11\1\12\1\13\1\14\2\15\3\2" +
+                  "\1\16\2\2\1\17\1\20\3\2\1\21\1\2\1\22" +
+                  "\1\23\1\2\1\24";
 
   private static int[] zzUnpackAction() {
-    int[] result = new int[40];
+    int[] result = new int[39];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -83,20 +79,20 @@ class IMPParser {
   }
 
 
-  /**
+  /** 
    * Translates a state to a row index in the transition table
    */
   private static final int[] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-          "\0\0\0\35\0\72\0\35\0\127\0\164\0\221\0\256" +
-                  "\0\313\0\350\0\35\0\35\0\35\0\35\0\u0105\0\35" +
-                  "\0\35\0\u0122\0\35\0\35\0\35\0\u013f\0\35\0\u015c" +
-                  "\0\u0179\0\u0196\0\164\0\u01b3\0\u01d0\0\35\0\35\0\u01ed" +
-                  "\0\u020a\0\u0227\0\164\0\u0244\0\164\0\164\0\u0261\0\164";
+          "\0\0\0\35\0\72\0\127\0\164\0\221\0\256\0\313" +
+                  "\0\350\0\72\0\72\0\72\0\72\0\u0105\0\72\0\72" +
+                  "\0\u0122\0\72\0\72\0\72\0\u013f\0\72\0\u015c\0\u0179" +
+                  "\0\u0196\0\164\0\u01b3\0\u01d0\0\72\0\72\0\u01ed\0\u020a" +
+                  "\0\u0227\0\164\0\u0244\0\164\0\164\0\u0261\0\164";
 
   private static int[] zzUnpackRowMap() {
-    int[] result = new int[40];
+    int[] result = new int[39];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -113,24 +109,24 @@ class IMPParser {
     return j;
   }
 
-  /**
+  /** 
    * The transition table of the DFA
    */
   private static final int[] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-          "\1\2\1\3\1\4\1\5\2\6\1\7\1\10\4\6" +
-                  "\1\11\1\12\2\6\1\13\1\14\1\15\1\16\1\17" +
-                  "\1\20\1\21\1\22\1\23\1\24\1\25\1\26\1\27" +
-                  "\36\0\2\3\35\0\1\6\1\30\13\6\20\0\15\6" +
-                  "\20\0\6\6\1\31\6\6\20\0\5\6\1\32\7\6" +
-                  "\20\0\4\6\1\33\7\6\1\34\20\0\13\6\1\35" +
-                  "\1\6\41\0\1\36\40\0\1\37\37\0\1\26\4\0" +
-                  "\2\6\1\40\12\6\20\0\7\6\1\41\5\6\20\0" +
-                  "\6\6\1\42\6\6\20\0\1\43\14\6\20\0\11\6" +
-                  "\1\44\3\6\20\0\3\6\1\45\11\6\20\0\3\6" +
-                  "\1\46\11\6\20\0\7\6\1\40\5\6\20\0\6\6" +
-                  "\1\47\6\6\20\0\3\6\1\50\11\6\15\0";
+          "\1\0\1\2\1\3\1\4\2\5\1\6\1\7\4\5" +
+                  "\1\10\1\11\2\5\1\12\1\13\1\14\1\15\1\16" +
+                  "\1\17\1\20\1\21\1\22\1\23\1\24\1\25\1\26" +
+                  "\1\0\2\2\72\0\1\5\1\27\13\5\20\0\15\5" +
+                  "\20\0\6\5\1\30\6\5\20\0\5\5\1\31\7\5" +
+                  "\20\0\4\5\1\32\7\5\1\33\20\0\13\5\1\34" +
+                  "\1\5\41\0\1\35\40\0\1\36\37\0\1\25\4\0" +
+                  "\2\5\1\37\12\5\20\0\7\5\1\40\5\5\20\0" +
+                  "\6\5\1\41\6\5\20\0\1\42\14\5\20\0\11\5" +
+                  "\1\43\3\5\20\0\3\5\1\44\11\5\20\0\3\5" +
+                  "\1\45\11\5\20\0\7\5\1\37\5\5\20\0\6\5" +
+                  "\1\46\6\5\20\0\3\5\1\47\11\5\15\0";
 
   private static int[] zzUnpackTrans() {
     int[] result = new int[638];
@@ -171,11 +167,11 @@ class IMPParser {
   private static final int[] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-          "\1\0\1\11\1\1\1\11\6\1\4\11\1\1\2\11" +
-                  "\1\1\3\11\1\1\1\11\6\1\2\11\11\1";
+          "\1\0\1\1\1\11\6\1\4\11\1\0\2\11\1\1" +
+                  "\3\11\1\1\1\11\6\1\2\11\11\1";
 
   private static int[] zzUnpackAttribute() {
-    int[] result = new int[40];
+    int[] result = new int[39];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -193,80 +189,56 @@ class IMPParser {
     return j;
   }
 
-  /**
-   * the input device
-   */
+  /** the input device */
   private java.io.Reader zzReader;
 
-  /**
-   * the current state of the DFA
-   */
+  /** the current state of the DFA */
   private int zzState;
 
-  /**
-   * the current lexical state
-   */
+  /** the current lexical state */
   private int zzLexicalState = YYINITIAL;
 
-  /**
-   * this buffer contains the current text to be matched and is
-   * the source of the yytext() string
-   */
+  /** this buffer contains the current text to be matched and is
+   the source of the yytext() string */
   private char zzBuffer[] = new char[ZZ_BUFFERSIZE];
 
-  /**
-   * the textposition at the last accepting state
-   */
+  /** the textposition at the last accepting state */
   private int zzMarkedPos;
 
-  /**
-   * the current text position in the buffer
-   */
+  /** the current text position in the buffer */
   private int zzCurrentPos;
 
-  /**
-   * startRead marks the beginning of the yytext() string in the buffer
-   */
+  /** startRead marks the beginning of the yytext() string in the buffer */
   private int zzStartRead;
 
-  /**
-   * endRead marks the last character in the buffer, that has been read
-   * from input
-   */
+  /** endRead marks the last character in the buffer, that has been read
+   from input */
   private int zzEndRead;
 
-  /**
-   * number of newlines encountered up to the start of the matched text
-   */
+  /** number of newlines encountered up to the start of the matched text */
   private int yyline;
 
-  /**
-   * the number of characters up to the start of the matched text
-   */
+  /** the number of characters up to the start of the matched text */
   private int yychar;
 
   /**
-   * the number of characters from the last newline up to the start of the
+   * the number of characters from the last newline up to the start of the 
    * matched text
    */
   private int yycolumn;
 
-  /**
+  /** 
    * zzAtBOL == true iff the scanner is currently at the beginning of a line
    */
   private boolean zzAtBOL = true;
 
-  /**
-   * zzAtEOF == true iff the scanner is at the EOF
-   */
+  /** zzAtEOF == true iff the scanner is at the EOF */
   private boolean zzAtEOF;
 
-  /**
-   * denotes if the user-EOF-code has already been executed
-   */
+  /** denotes if the user-EOF-code has already been executed */
   private boolean zzEOFDone;
-
-  /**
+  
+  /** 
    * The number of occupied positions in zzBuffer beyond zzEndRead.
    * When a lead/high surrogate has been read from the input stream
    * into the final zzBuffer position, this will have a value of 1;
@@ -275,50 +247,50 @@ class IMPParser {
   private int zzFinalHighSurrogate = 0;
 
   /* user code: */
-  private Stack<String> operatorStack;
+  private class TokenWithLine {
+    String str;
+    int line;
+
+    public TokenWithLine(String str, int line) {
+      this.str = str;
+      this.line = line;
+    }
+  }
+
+  private Stack<TokenWithLine> operatorStack;
   private Stack<ASTNode> nodesStack;
   public AST syntaxTree;
 
-  private void pushStmtNode(ASTNode node) {
-        /*if (!nodesStack.empty() && (nodesStack.peek() instanceof SequenceNode ||
-                                    nodesStack.peek() instanceof IfNode ||
-                                    nodesStack.peek() instanceof WhileNode ||
-                                    nodesStack.peek() instanceof AssignmentNode ||
-                                    nodesStack.peek() instanceof BlockNode)) {
-            ASTNode top = nodesStack.pop();
-            StmtSeq stmtSeq = new StmtSeq();
-            stmtSeq.add(top);
-            stmtSeq.add(node);
-            nodesStack.push(stmtSeq);
-        } else*/
-        nodesStack.push(node);
+  private void pushBlockNode(BlockNode block) {
+    if (!operatorStack.empty() && operatorStack.peek().str.equals("else")) {
+      // this was an else block
+      // build the if node
+      operatorStack.pop(); // pop else
+      TokenWithLine token = operatorStack.pop(); // pop if
+      nodesStack.push(block);
+      nodesStack.push(ASTNode.buildNode(token.line, "if", nodesStack));
+    } else if (!operatorStack.empty() && operatorStack.peek().str.equals("while")) {
+      // this was a (while) do block
+      // build the while node
+      TokenWithLine token = operatorStack.pop(); // pop while
+      nodesStack.push(block);
+      nodesStack.push(ASTNode.buildNode(token.line, "while", nodesStack));
+    } else {
+      // simple block node
+      nodesStack.push(block);
     }
+  }
 
-    private void pushBlockNode(BlockNode block) {
-        if (!operatorStack.empty() && operatorStack.peek().equals("else")) {
-            // this was an else block
-            // build the if node
-            operatorStack.pop(); // pop else
-            operatorStack.pop(); // pop if
-            nodesStack.push(block);
-            pushStmtNode(ASTNode.buildNode("if", nodesStack));
-        } else if (!operatorStack.empty() && operatorStack.peek().equals("while")) {
-            // this was a (while) do block
-            // build the while node
-            operatorStack.pop(); // pop while
-          nodesStack.push(block);
-          pushStmtNode(ASTNode.buildNode("while", nodesStack));
-        } else {
-          // simple block node
-          pushStmtNode(block);
-        }
-    }
+  private void makeOperatorNode() {
+    TokenWithLine op = operatorStack.pop();
+    nodesStack.push(ASTNode.buildNode(op.line, op.str, nodesStack));
+  }
 
 
   /**
    * Creates a new scanner
    *
-   * @param in the java.io.Reader to read input from.
+   * @param   in  the java.io.Reader to read input from.
    */
   IMPParser(java.io.Reader in) {
     operatorStack = new Stack<>();
@@ -328,10 +300,10 @@ class IMPParser {
   }
 
 
-  /**
+  /** 
    * Unpacks the compressed character translation table.
    *
-   * @param packed the packed character translation table
+   * @param packed   the packed character translation table
    * @return the unpacked character translation table
    */
   private static char[] zzUnpackCMap(String packed) {
@@ -350,8 +322,9 @@ class IMPParser {
   /**
    * Refills the input buffer.
    *
-   * @return <code>false</code>, iff there was new input.
-   * @throws java.io.IOException if any I/O-Error occurs
+   * @return      <code>false</code>, iff there was new input.
+   *
+   * @exception java.io.IOException  if any I/O-Error occurs
    */
   private boolean zzRefill() throws java.io.IOException {
 
@@ -373,7 +346,7 @@ class IMPParser {
     /* is the buffer big enough? */
     if (zzCurrentPos >= zzBuffer.length - zzFinalHighSurrogate) {
       /* if not: blow it up */
-      char newBuffer[] = new char[zzBuffer.length * 2];
+      char newBuffer[] = new char[zzBuffer.length*2];
       System.arraycopy(zzBuffer, 0, newBuffer, 0, zzBuffer.length);
       zzBuffer = newBuffer;
       zzEndRead += zzFinalHighSurrogate;
@@ -407,7 +380,7 @@ class IMPParser {
     return true;
   }
 
-
+    
   /**
    * Closes the input stream.
    */
@@ -423,19 +396,19 @@ class IMPParser {
   /**
    * Resets the scanner to read from a new input stream.
    * Does not close the old reader.
-   * <p>
-   * All internal variables are reset, the old input stream
+   *
+   * All internal variables are reset, the old input stream 
    * <b>cannot</b> be reused (internal buffer is discarded and lost).
    * Lexical state is set to <tt>ZZ_INITIAL</tt>.
-   * <p>
+   *
    * Internal scan buffer is resized down to its initial length, if it has grown.
    *
-   * @param reader the new input stream
+   * @param reader   the new input stream 
    */
   public final void yyreset(java.io.Reader reader) {
     zzReader = reader;
     zzAtBOL = true;
-    zzAtEOF = false;
+    zzAtEOF  = false;
     zzEOFDone = false;
     zzEndRead = zzStartRead = 0;
     zzCurrentPos = zzMarkedPos = 0;
@@ -469,22 +442,23 @@ class IMPParser {
    * Returns the text matched by the current regular expression.
    */
   public final String yytext() {
-    return new String(zzBuffer, zzStartRead, zzMarkedPos - zzStartRead);
+    return new String(zzBuffer, zzStartRead, zzMarkedPos - zzStartRead );
   }
 
 
   /**
-   * Returns the character at position <tt>pos</tt> from the
-   * matched text.
-   * <p>
+   * Returns the character at position <tt>pos</tt> from the 
+   * matched text. 
+   * 
    * It is equivalent to yytext().charAt(pos), but faster
    *
-   * @param pos the position of the character to fetch.
+   * @param pos the position of the character to fetch. 
    *            A value from 0 to yylength()-1.
+   *
    * @return the character at position pos
    */
   public final char yycharat(int pos) {
-    return zzBuffer[zzStartRead + pos];
+    return zzBuffer[zzStartRead+pos];
   }
 
 
@@ -492,23 +466,23 @@ class IMPParser {
    * Returns the length of the matched text region.
    */
   public final int yylength() {
-    return zzMarkedPos - zzStartRead;
+    return zzMarkedPos -zzStartRead;
   }
 
 
   /**
    * Reports an error that occured while scanning.
-   * <p>
-   * In a wellformed scanner (no or only correct usage of
-   * yypushback(int) and a match-all fallback rule) this method
+   *
+   * In a wellformed scanner (no or only correct usage of 
+   * yypushback(int) and a match-all fallback rule) this method 
    * will only be called with things that "Can't Possibly Happen".
    * If this method is called, something is seriously wrong
    * (e.g. a JFlex bug producing a faulty scanner etc.).
-   * <p>
+   *
    * Usual syntax/scanner level error handling should be done
    * in error fallback rules.
    *
-   * @param errorCode the code of the errormessage to display
+   * @param   errorCode  the code of the errormessage to display
    */
   private void zzScanError(int errorCode) {
     String message;
@@ -519,19 +493,19 @@ class IMPParser {
     }
 
     throw new Error(message);
-  }
+  } 
 
 
   /**
    * Pushes the specified amount of characters back into the input stream.
-   * <p>
+   *
    * They will be read again by then next call of the scanning method
    *
-   * @param number the number of characters to be read again.
-   *               This number must not be greater than yylength()!
+   * @param number  the number of characters to be read again.
+   *                This number must not be greater than yylength()!
    */
   public void yypushback(int number) {
-    if (number > yylength())
+    if (number > yylength() )
       zzScanError(ZZ_PUSHBACK_2BIG);
 
     zzMarkedPos -= number;
@@ -564,7 +538,7 @@ class IMPParser {
    * the end of input is encountered or an I/O-Error occurs.
    *
    * @return the next token
-   * @throws java.io.IOException if any I/O-Error occurs
+   * @exception java.io.IOException  if any I/O-Error occurs
    */
   public int yylex() throws java.io.IOException {
     int zzInput;
@@ -589,7 +563,7 @@ class IMPParser {
       int zzCharCount;
       for (zzCurrentPosL = zzStartRead;
            zzCurrentPosL < zzMarkedPosL;
-           zzCurrentPosL += zzCharCount) {
+           zzCurrentPosL += zzCharCount ) {
         zzCh = Character.codePointAt(zzBufferL, zzCurrentPosL, zzMarkedPosL);
         zzCharCount = Character.charCount(zzCh);
         switch (zzCh) {
@@ -629,9 +603,9 @@ class IMPParser {
           zzEndReadL = zzEndRead;
           zzMarkedPosL = zzMarkedPos;
           zzBufferL = zzBuffer;
-          if (eof)
+          if (eof) 
             zzPeek = false;
-          else
+          else 
             zzPeek = zzBufferL[zzMarkedPosL] == '\n';
         }
         if (zzPeek) yyline--;
@@ -639,20 +613,19 @@ class IMPParser {
       zzAction = -1;
 
       zzCurrentPosL = zzCurrentPos = zzStartRead = zzMarkedPosL;
-
+  
       zzState = ZZ_LEXSTATE[zzLexicalState];
 
       // set up zzAction for empty match case:
       int zzAttributes = zzAttrL[zzState];
-      if ((zzAttributes & 1) == 1) {
+      if ((zzAttributes & 1) == 1 ) {
         zzAction = zzState;
       }
 
 
-      zzForAction:
-      {
+      zzForAction: {
         while (true) {
-
+    
           if (zzCurrentPosL < zzEndReadL) {
             zzInput = Character.codePointAt(zzBufferL, zzCurrentPosL, zzEndReadL);
             zzCurrentPosL += Character.charCount(zzInput);
@@ -677,12 +650,12 @@ class IMPParser {
               zzCurrentPosL += Character.charCount(zzInput);
             }
           }
-          int zzNext = zzTransL[zzRowMapL[zzState] + zzCMapL[zzInput]];
+          int zzNext = zzTransL[zzRowMapL[zzState] + zzCMapL[zzInput] ];
           if (zzNext == -1) break zzForAction;
           zzState = zzNext;
 
           zzAttributes = zzAttrL[zzState];
-          if ((zzAttributes & 1) == 1) {
+          if ((zzAttributes & 1) == 1 ) {
             zzAction = zzState;
             zzMarkedPosL = zzCurrentPosL;
             if ((zzAttributes & 8) == 8) break zzForAction;
@@ -701,93 +674,81 @@ class IMPParser {
       } else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1: {
-            System.out.print(yytext());
+            nodesStack.push(new IntNode(yyline + 1, Integer.parseInt(yytext())));
+          }
+          // fall through
+          case 21:
+            break;
+          case 2: {
+            nodesStack.push(new VarNode(yyline + 1, yytext()));
           }
           // fall through
           case 22:
             break;
-          case 2: {
-            nodesStack.push(new IntNode(Integer.parseInt(yytext())));
+          case 3: {
+            while (!operatorStack.empty() &&
+                    (operatorStack.peek().str.equals("/") || operatorStack.peek().str.equals("+")))
+              makeOperatorNode();
+
+            operatorStack.push(new TokenWithLine("+", yyline + 1));
           }
           // fall through
           case 23:
             break;
-          case 3: {
-            nodesStack.push(new VarNode(yytext()));
+          case 4: {
+            while (!operatorStack.empty() && operatorStack.peek().str.equals("/"))
+              makeOperatorNode();
+
+            operatorStack.push(new TokenWithLine("/", yyline + 1));
           }
           // fall through
           case 24:
             break;
-          case 4: {
-            while (!operatorStack.empty() && (operatorStack.peek().equals("/") || operatorStack.peek().equals("+"))) {
-              String op = operatorStack.pop();
-              nodesStack.push(ASTNode.buildNode(op, nodesStack));
-            }
-            operatorStack.push("+");
+          case 5: {
+            operatorStack.push(new TokenWithLine("(", yyline + 1));
           }
           // fall through
           case 25:
             break;
-          case 5: {
-            while (!operatorStack.empty() && operatorStack.peek().equals("/")) {
-              String op = operatorStack.pop();
-              nodesStack.push(ASTNode.buildNode(op, nodesStack));
-            }
-            operatorStack.push("/");
-          }
-          // fall through
-          case 26:
-            break;
           case 6: {
-            operatorStack.push("(");
-          }
-          // fall through
-          case 27:
-            break;
-          case 7: {
-            while (!operatorStack.empty() && !operatorStack.peek().equals("(")) {
-              String op = operatorStack.pop();
-              nodesStack.push(ASTNode.buildNode(op, nodesStack));
-            }
+            while (!operatorStack.empty() && !operatorStack.peek().str.equals("("))
+              makeOperatorNode();
 
             operatorStack.pop(); // pop the opening bracket '('
             nodesStack.push(new BracketNode(nodesStack.pop()));
           }
           // fall through
-          case 28:
+          case 26:
+            break;
+          case 7: {
+            while (!operatorStack.empty() &&
+                    (operatorStack.peek().str.equals("+") || operatorStack.peek().str.equals("/")))
+              makeOperatorNode();
+
+            operatorStack.push(new TokenWithLine(">", yyline + 1));
+          }
+          // fall through
+          case 27:
             break;
           case 8: {
-            while (!operatorStack.empty() && (operatorStack.peek().equals("+") || operatorStack.peek().equals("/"))) {
-              String op = operatorStack.pop();
-              nodesStack.push(ASTNode.buildNode(op, nodesStack));
-            }
-            operatorStack.push(">");
+            while (!operatorStack.empty() && operatorStack.peek().str.equals(">"))
+              makeOperatorNode();
+
+            operatorStack.push(new TokenWithLine("!", yyline + 1));
+          }
+          // fall through
+          case 28:
+            break;
+          case 9: {
+            operatorStack.push(new TokenWithLine("{", yyline + 1));
+            nodesStack.push(new BlockBegin()); // mark the beginning of a block
           }
           // fall through
           case 29:
             break;
-          case 9: {
-            while (!operatorStack.empty() && operatorStack.peek().equals(">")) {
-              String op = operatorStack.pop();
-              nodesStack.push(ASTNode.buildNode(op, nodesStack));
-            }
-            operatorStack.push("!");
-          }
-          // fall through
-          case 30:
-            break;
           case 10: {
-            operatorStack.push("{");
-            nodesStack.push(new BlockBegin()); // mark the beginning of a block
-          }
-          // fall through
-          case 31:
-            break;
-          case 11: {
-            while (!operatorStack.empty() && !operatorStack.peek().equals("{")) {
-              String op = operatorStack.pop();
-              nodesStack.push(ASTNode.buildNode(op, nodesStack));
-            }
+            while (!operatorStack.empty() && !operatorStack.peek().str.equals("{"))
+              makeOperatorNode();
 
             operatorStack.pop(); // delete '{' from the stack
 
@@ -802,136 +763,86 @@ class IMPParser {
             pushBlockNode(new BlockNode(blockContent));
           }
           // fall through
-          case 32:
+          case 30:
             break;
-          case 12: {
-            operatorStack.push("=");
+          case 11: {
+            operatorStack.push(new TokenWithLine("=", yyline + 1));
           }
           // fall through
-          case 33:
+          case 31:
             break;
-          case 13: { // the end of the variables list or of an assignment
-            while (!operatorStack.empty() && !operatorStack.peek().equals("int") && !operatorStack.peek().equals("=")) {
-              String op = operatorStack.pop();
-              nodesStack.push(ASTNode.buildNode(op, nodesStack));
-            }
+          case 12: { // the end of the variables list or of an assignment
+            while (!operatorStack.empty() &&
+                    !operatorStack.peek().str.equals("int") && !operatorStack.peek().str.equals("="))
+              makeOperatorNode();
 
-            String op = operatorStack.pop();
-            if (op.equals("int")) {
+            TokenWithLine op = operatorStack.pop();
+            if (op.str.equals("int")) {
               syntaxTree.root = new MainNode();
 
               while (!nodesStack.empty())
                 syntaxTree.root.declareVar(((VarNode) nodesStack.pop()).name);
             } else { // ;
-              ASTNode assignmentNode = ASTNode.buildNode("=", nodesStack);
-              pushStmtNode(assignmentNode);
+              ASTNode assignmentNode = ASTNode.buildNode(op.line, "=", nodesStack);
+              nodesStack.push(assignmentNode);
             }
+          }
+          // fall through
+          case 32:
+            break;
+          case 13: {
+          }
+          // fall through
+          case 33:
+            break;
+          case 14: {
+            operatorStack.push(new TokenWithLine("if", yyline + 1));
           }
           // fall through
           case 34:
             break;
-          case 14: {
+          case 15: {
+            while (!operatorStack.empty() && (operatorStack.peek().str.equals("!") ||
+                    operatorStack.peek().str.equals("&&") ||
+                    operatorStack.peek().str.equals(">")))
+              makeOperatorNode();
+
+            operatorStack.push(new TokenWithLine("&&", yyline + 1));
           }
           // fall through
           case 35:
             break;
-          case 15: {
-            operatorStack.push("if");
+          case 16: {
+            pushBlockNode(new BlockNode());
           }
           // fall through
           case 36:
             break;
-          case 16: {
-            while (!operatorStack.empty() && (operatorStack.peek().equals("!") ||
-                    operatorStack.peek().equals("&&") ||
-                    operatorStack.peek().equals(">"))) {
-              String op = operatorStack.pop();
-              nodesStack.push(ASTNode.buildNode(op, nodesStack));
-            }
-            operatorStack.push("&&");
+          case 17: { // the beginning of the variables list
+            operatorStack.push(new TokenWithLine("int", yyline + 1));
           }
           // fall through
           case 37:
             break;
-          case 17: {
-            pushBlockNode(new BlockNode());
+          case 18: {
+            nodesStack.push(new BoolNode(yyline + 1, Boolean.parseBoolean(yytext())));
           }
           // fall through
           case 38:
             break;
-          case 18: { // the beginning of the variables list
-            operatorStack.push("int");
+          case 19: {
+            operatorStack.push(new TokenWithLine("else", yyline + 1));
           }
           // fall through
           case 39:
             break;
-          case 19: {
-            nodesStack.push(new BoolNode(Boolean.parseBoolean(yytext())));
-          }
-          // fall through
-          case 40:
-            break;
           case 20: {
-            operatorStack.push("else");
+            operatorStack.push(new TokenWithLine("while", yyline + 1));
           }
           // fall through
-          case 41:
-            break;
-          case 21: {
-            operatorStack.push("while");
-          }
-          // fall through
-          case 42:
-            break;
+          case 40: break;
           default:
             zzScanError(ZZ_NO_MATCH);
-        }
-      }
-    }
-  }
-
-  /**
-   * Runs the scanner on input files.
-   * <p>
-   * This is a standalone scanner, it will print any unmatched
-   * text to System.out unchanged.
-   *
-   * @param argv the command line, contains the filenames to run
-   *             the scanner on.
-   */
-  public static void main(String argv[]) {
-    if (argv.length == 0) {
-      System.out.println("Usage : java IMPParser [ --encoding <name> ] <inputfile(s)>");
-    } else {
-      int firstFilePos = 0;
-      String encodingName = "UTF-8";
-      if (argv[0].equals("--encoding")) {
-        firstFilePos = 2;
-        encodingName = argv[1];
-        try {
-          java.nio.charset.Charset.forName(encodingName); // Side-effect: is encodingName valid? 
-        } catch (Exception e) {
-          System.out.println("Invalid encoding '" + encodingName + "'");
-          return;
-        }
-      }
-      for (int i = firstFilePos; i < argv.length; i++) {
-        IMPParser scanner = null;
-        try {
-          java.io.FileInputStream stream = new java.io.FileInputStream(argv[i]);
-          java.io.Reader reader = new java.io.InputStreamReader(stream, encodingName);
-          scanner = new IMPParser(reader);
-          while (!scanner.zzAtEOF) scanner.yylex();
-        } catch (java.io.FileNotFoundException e) {
-          System.out.println("File not found : \""+argv[i]+"\"");
-        }
-        catch (java.io.IOException e) {
-          System.out.println("IO error scanning file \""+argv[i]+"\"");
-          System.out.println(e);
-        }
-        catch (Exception e) {
-          System.out.println("Unexpected exception:");
-          e.printStackTrace();
         }
       }
     }

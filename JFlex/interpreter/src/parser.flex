@@ -5,35 +5,45 @@ import java.util.*;
 %class IMPParser
 %line
 %int
-%standalone
 
 %{
-    private Stack<String> operatorStack;
+    private class TokenWithLine {
+        String str;
+        int line;
+
+        public TokenWithLine(String str, int line) {
+            this.str = str;
+            this.line = line;
+        }
+    }
+
+    private Stack<TokenWithLine> operatorStack;
     private Stack<ASTNode> nodesStack;
     public AST syntaxTree;
 
-    private void pushStmtNode(ASTNode node) {
-        nodesStack.push(node);
-    }
-
     private void pushBlockNode(BlockNode block) {
-        if (!operatorStack.empty() && operatorStack.peek().equals("else")) {
+        if (!operatorStack.empty() && operatorStack.peek().str.equals("else")) {
             // this was an else block
             // build the if node
             operatorStack.pop(); // pop else
-            operatorStack.pop(); // pop if
+            TokenWithLine token = operatorStack.pop(); // pop if
             nodesStack.push(block);
-            pushStmtNode(ASTNode.buildNode("if", nodesStack));
-        } else if (!operatorStack.empty() && operatorStack.peek().equals("while")) {
+            nodesStack.push(ASTNode.buildNode(token.line, "if", nodesStack));
+        } else if (!operatorStack.empty() && operatorStack.peek().str.equals("while")) {
             // this was a (while) do block
             // build the while node
-            operatorStack.pop(); // pop while
+            TokenWithLine token = operatorStack.pop(); // pop while
             nodesStack.push(block);
-            pushStmtNode(ASTNode.buildNode("while", nodesStack));
+            nodesStack.push(ASTNode.buildNode(token.line, "while", nodesStack));
         } else {
             // simple block node
-            pushStmtNode(block);
+            nodesStack.push(block);
         }
+    }
+
+    private void makeOperatorNode() {
+        TokenWithLine op = operatorStack.pop();
+        nodesStack.push(ASTNode.buildNode(op.line, op.str, nodesStack));
     }
 %}
 
@@ -55,58 +65,54 @@ import java.util.*;
     syntaxTree.root.setSon(0, nodesStack.peek());
 %eof}
 
-Number = [1-9][0-9]*|0
-AVal = {Number}
+AVal = [1-9][0-9]*|0
 BVal = true|false
 Var = [a-z]+
 
 %%
 
-{BVal} { nodesStack.push(new BoolNode(Boolean.parseBoolean(yytext()))); }
+{BVal} { nodesStack.push(new BoolNode(yyline + 1, Boolean.parseBoolean(yytext()))); }
 
-if { operatorStack.push("if"); }
+if { operatorStack.push(new TokenWithLine("if", yyline + 1)); }
 
-while { operatorStack.push("while"); }
+while { operatorStack.push(new TokenWithLine("while", yyline + 1)); }
 
-else { operatorStack.push("else"); }
+else { operatorStack.push(new TokenWithLine("else", yyline + 1)); }
 
 int
 {
     // the beginning of the variables list
-    operatorStack.push("int");
+    operatorStack.push(new TokenWithLine("int", yyline + 1));
 }
 
-{Var} { nodesStack.push(new VarNode(yytext())); }
+{Var} { nodesStack.push(new VarNode(yyline + 1, yytext())); }
 
-{AVal} { nodesStack.push(new IntNode(Integer.parseInt(yytext()))); }
+{AVal} { nodesStack.push(new IntNode(yyline + 1, Integer.parseInt(yytext()))); }
 
 // arithmetic and boolean expressions
 \+
 {
-    while (!operatorStack.empty() && (operatorStack.peek().equals("/") || operatorStack.peek().equals("+"))) {
-        String op = operatorStack.pop();
-        nodesStack.push(ASTNode.buildNode(op, nodesStack));
-    }
-    operatorStack.push("+");
+    while (!operatorStack.empty() &&
+          (operatorStack.peek().str.equals("/") || operatorStack.peek().str.equals("+")))
+        makeOperatorNode();
+    
+    operatorStack.push(new TokenWithLine("+", yyline + 1));
 }
 
 \/
 {
-    while (!operatorStack.empty() && operatorStack.peek().equals("/")) {
-        String op = operatorStack.pop();
-        nodesStack.push(ASTNode.buildNode(op, nodesStack));
-    }
-    operatorStack.push("/");
+    while (!operatorStack.empty() && operatorStack.peek().str.equals("/"))
+        makeOperatorNode();
+        
+    operatorStack.push(new TokenWithLine("/", yyline + 1));
 }
 
-\( { operatorStack.push("("); }
+\( { operatorStack.push(new TokenWithLine("(", yyline + 1)); }
 
 \)
 {
-    while (!operatorStack.empty() && !operatorStack.peek().equals("(")) {
-        String op = operatorStack.pop();
-        nodesStack.push(ASTNode.buildNode(op, nodesStack));
-    }
+    while (!operatorStack.empty() && !operatorStack.peek().str.equals("("))
+        makeOperatorNode();
 
     operatorStack.pop(); // pop the opening bracket '('
     nodesStack.push(new BracketNode(nodesStack.pop()));
@@ -114,31 +120,29 @@ int
 
 &&
 {
-    while (!operatorStack.empty() && (operatorStack.peek().equals("!") ||
-                                      operatorStack.peek().equals("&&") ||
-                                      operatorStack.peek().equals(">"))) {
-        String op = operatorStack.pop();
-        nodesStack.push(ASTNode.buildNode(op, nodesStack));
-    }
-    operatorStack.push("&&");
+    while (!operatorStack.empty() && (operatorStack.peek().str.equals("!") ||
+                                      operatorStack.peek().str.equals("&&") ||
+                                      operatorStack.peek().str.equals(">")))
+        makeOperatorNode();
+
+    operatorStack.push(new TokenWithLine("&&", yyline + 1));
 }
 
 >
 {
-    while (!operatorStack.empty() && (operatorStack.peek().equals("+") || operatorStack.peek().equals("/"))) {
-        String op = operatorStack.pop();
-        nodesStack.push(ASTNode.buildNode(op, nodesStack));
-    }
-    operatorStack.push(">");
+    while (!operatorStack.empty() &&
+          (operatorStack.peek().str.equals("+") || operatorStack.peek().str.equals("/")))
+        makeOperatorNode();
+
+    operatorStack.push(new TokenWithLine(">", yyline + 1));
 }
 
 \!
 {
-    while (!operatorStack.empty() && operatorStack.peek().equals(">")) {
-        String op = operatorStack.pop();
-        nodesStack.push(ASTNode.buildNode(op, nodesStack));
-    }
-    operatorStack.push("!");
+    while (!operatorStack.empty() && operatorStack.peek().str.equals(">"))
+        makeOperatorNode();
+
+    operatorStack.push(new TokenWithLine("!", yyline + 1));
 }
 
 \{\}
@@ -148,16 +152,14 @@ int
 
 \{
 {
-    operatorStack.push("{");
+    operatorStack.push(new TokenWithLine("{", yyline + 1));
     nodesStack.push(new BlockBegin()); // mark the beginning of a block
 }
 
 \}
 {
-    while (!operatorStack.empty() && !operatorStack.peek().equals("{")) {
-        String op = operatorStack.pop();
-        nodesStack.push(ASTNode.buildNode(op, nodesStack));
-    }
+    while (!operatorStack.empty() && !operatorStack.peek().str.equals("{"))
+        makeOperatorNode();
 
     operatorStack.pop(); // delete '{' from the stack
 
@@ -172,25 +174,24 @@ int
     pushBlockNode(new BlockNode(blockContent));
 }
 
-= { operatorStack.push("="); }
+= { operatorStack.push(new TokenWithLine("=", yyline + 1)); }
 
 ;
 {
     // the end of the variables list or of an assignment
-    while (!operatorStack.empty() && !operatorStack.peek().equals("int") && !operatorStack.peek().equals("=")) {
-        String op = operatorStack.pop();
-        nodesStack.push(ASTNode.buildNode(op, nodesStack));
-    }
+    while (!operatorStack.empty() &&
+           !operatorStack.peek().str.equals("int") && !operatorStack.peek().str.equals("="))
+        makeOperatorNode();
 
-    String op = operatorStack.pop();
-    if (op.equals("int")) {
+    TokenWithLine op = operatorStack.pop();
+    if (op.str.equals("int")) {
         syntaxTree.root = new MainNode();
 
         while (!nodesStack.empty())
             syntaxTree.root.declareVar(((VarNode) nodesStack.pop()).name);
     } else { // ;
-        ASTNode assignmentNode = ASTNode.buildNode("=", nodesStack);
-        pushStmtNode(assignmentNode);
+        ASTNode assignmentNode = ASTNode.buildNode(op.line, "=", nodesStack);
+        nodesStack.push(assignmentNode);
     }
 }
 

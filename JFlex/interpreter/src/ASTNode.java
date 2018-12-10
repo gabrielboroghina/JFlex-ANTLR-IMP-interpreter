@@ -2,10 +2,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 
-public class ASTNode {
+public class ASTNode implements Interpretable {
+    int line;
     ASTNode[] sons;
 
-    public ASTNode(int nrSons) {
+    public ASTNode(int line, int nrSons) {
+        this.line = line;
         if (nrSons == 0)
             this.sons = null;
         else
@@ -20,36 +22,41 @@ public class ASTNode {
             this.sons[nr++] = son;
     }
 
+    public ASTNode(int line, ASTNode... sons) {
+        this(sons);
+        this.line = line;
+    }
+
     protected void setSon(int index, ASTNode son) {
         sons[index] = son;
     }
 
-    public static ASTNode buildNode(String type, Stack<ASTNode> args) {
+    public static ASTNode buildNode(int line, String type, Stack<ASTNode> args) {
         switch (type) {
             case "+": {
                 ASTNode right = args.pop();
                 ASTNode left = args.pop();
-                return new PlusNode(left, right);
+                return new PlusNode(line, left, right);
             }
             case "/": {
                 ASTNode right = args.pop();
                 ASTNode left = args.pop();
-                return new DivNode(left, right);
+                return new DivNode(line, left, right);
             }
             case "=": {
                 ASTNode right = args.pop();
                 ASTNode left = args.pop();
-                return new AssignmentNode(left, right);
+                return new AssignmentNode(line, left, right);
             }
             case "&&": {
                 ASTNode right = args.pop();
                 ASTNode left = args.pop();
-                return new AndNode(left, right);
+                return new AndNode(line, left, right);
             }
             case ">": {
                 ASTNode right = args.pop();
                 ASTNode left = args.pop();
-                return new GreaterNode(left, right);
+                return new GreaterNode(line, left, right);
             }
             case "if": {
                 ASTNode elseBlock = args.pop();
@@ -63,8 +70,15 @@ public class ASTNode {
                 return new WhileNode(condExpr, doBlock);
             }
             case "!":
-                return new NotNode(args.pop());
+                return new NotNode(line, args.pop());
         }
+        return null;
+    }
+
+    public Object interpret(HashMap<String, Integer> varList) throws UnassignedVarException, DivideByZeroException {
+        if (sons != null)
+            for (ASTNode son : sons)
+                son.interpret(varList);
         return null;
     }
 }
@@ -74,20 +88,14 @@ class MainNode extends ASTNode {
      * the ordered variables list
      */
     ArrayList<String> varList;
-    /**
-     * the mappings between a variable and its value
-     */
-    HashMap<String, Integer> vars;
 
     public MainNode() {
-        super(1);
+        super(0, 1);
         varList = new ArrayList<>();
-        vars = new HashMap<>();
     }
 
     public void declareVar(String varName) {
         varList.add(varName);
-        vars.put(varName, null);
     }
 
     @Override
@@ -97,10 +105,10 @@ class MainNode extends ASTNode {
 }
 
 class IntNode extends ASTNode {
-    int val;
+    private int val;
 
-    public IntNode(int val) {
-        super(0);
+    public IntNode(int line, int val) {
+        super(line, 0);
         this.val = val;
     }
 
@@ -108,13 +116,18 @@ class IntNode extends ASTNode {
     public String toString() {
         return "<IntNode> " + val;
     }
+
+    @Override
+    public Object interpret(HashMap<String, Integer> varList) {
+        return val;
+    }
 }
 
 class BoolNode extends ASTNode {
-    boolean val;
+    private boolean val;
 
-    public BoolNode(boolean val) {
-        super(0);
+    public BoolNode(int line, boolean val) {
+        super(line, 0);
         this.val = val;
     }
 
@@ -122,13 +135,18 @@ class BoolNode extends ASTNode {
     public String toString() {
         return "<BoolNode> " + (val ? "true" : "false");
     }
+
+    @Override
+    public Object interpret(HashMap<String, Integer> varList) {
+        return val;
+    }
 }
 
 class VarNode extends ASTNode {
     String name;
 
-    public VarNode(String name) {
-        super(0);
+    public VarNode(int line, String name) {
+        super(line, 0);
         this.name = name;
     }
 
@@ -136,27 +154,49 @@ class VarNode extends ASTNode {
     public String toString() {
         return "<VariableNode> " + name;
     }
+
+    @Override
+    public Object interpret(HashMap<String, Integer> varList) throws UnassignedVarException {
+        if (varList.containsKey(name) && varList.get(name) != null)
+            return varList.get(name);
+
+        throw new UnassignedVarException(line);
+    }
 }
 
 class PlusNode extends ASTNode {
-    public PlusNode(ASTNode left, ASTNode right) {
-        super(left, right);
+    public PlusNode(int line, ASTNode left, ASTNode right) {
+        super(line, left, right);
     }
 
     @Override
     public String toString() {
         return "<PlusNode> +";
     }
+
+    @Override
+    public Object interpret(HashMap<String, Integer> varList) throws UnassignedVarException, DivideByZeroException {
+        return (Integer) sons[0].interpret(varList) + (Integer) sons[1].interpret(varList);
+    }
 }
 
 class DivNode extends ASTNode {
-    public DivNode(ASTNode left, ASTNode right) {
-        super(left, right);
+    public DivNode(int line, ASTNode left, ASTNode right) {
+        super(line, left, right);
     }
 
     @Override
     public String toString() {
         return "<DivNode> /";
+    }
+
+    @Override
+    public Object interpret(HashMap<String, Integer> varList) throws UnassignedVarException, DivideByZeroException {
+        Integer right = (Integer) sons[1].interpret(varList);
+        if (right == 0)
+            throw new DivideByZeroException(line);
+
+        return (Integer) sons[0].interpret(varList) / right;
     }
 }
 
@@ -169,55 +209,81 @@ class BracketNode extends ASTNode {
     public String toString() {
         return "<BracketNode> ()";
     }
+
+    @Override
+    public Object interpret(HashMap<String, Integer> varList) throws UnassignedVarException, DivideByZeroException {
+        return sons[0].interpret(varList);
+    }
 }
 
 class AndNode extends ASTNode {
-    public AndNode(ASTNode left, ASTNode right) {
-        super(left, right);
+    public AndNode(int line, ASTNode left, ASTNode right) {
+        super(line, left, right);
     }
 
     @Override
     public String toString() {
         return "<AndNode> &&";
     }
+
+    @Override
+    public Object interpret(HashMap<String, Integer> varList) throws UnassignedVarException, DivideByZeroException {
+        return (Boolean) sons[0].interpret(varList) && (Boolean) sons[1].interpret(varList);
+    }
 }
 
 class GreaterNode extends ASTNode {
-    public GreaterNode(ASTNode left, ASTNode right) {
-        super(left, right);
+    public GreaterNode(int line, ASTNode left, ASTNode right) {
+        super(line, left, right);
     }
 
     @Override
     public String toString() {
         return "<GreaterNode> >";
     }
+
+    @Override
+    public Object interpret(HashMap<String, Integer> varList) throws UnassignedVarException, DivideByZeroException {
+        return (Integer) sons[0].interpret(varList) > (Integer) sons[1].interpret(varList);
+    }
 }
 
 class NotNode extends ASTNode {
-    public NotNode(ASTNode bExpr) {
-        super(bExpr);
+    public NotNode(int line, ASTNode bExpr) {
+        super(line, bExpr);
     }
 
     @Override
     public String toString() {
         return "<NotNode> !";
     }
+
+    @Override
+    public Object interpret(HashMap<String, Integer> varList) throws UnassignedVarException, DivideByZeroException {
+        return !(Boolean) sons[0].interpret(varList);
+    }
 }
 
 class AssignmentNode extends ASTNode {
-    public AssignmentNode(ASTNode left, ASTNode right) {
-        super(left, right);
+    public AssignmentNode(int line, ASTNode left, ASTNode right) {
+        super(line, left, right);
     }
 
     @Override
     public String toString() {
         return "<AssignmentNode> =";
     }
+
+    @Override
+    public Object interpret(HashMap<String, Integer> varList) throws UnassignedVarException, DivideByZeroException {
+        varList.put(((VarNode) sons[0]).name, (Integer) sons[1].interpret(varList));
+        return null;
+    }
 }
 
 class BlockNode extends ASTNode {
     public BlockNode() {
-        super(0);
+        super(0, 0);
     }
 
     public BlockNode(ASTNode stmt) {
@@ -239,6 +305,15 @@ class IfNode extends ASTNode {
     public String toString() {
         return "<IfNode> if";
     }
+
+    @Override
+    public Object interpret(HashMap<String, Integer> varList) throws UnassignedVarException, DivideByZeroException {
+        if ((Boolean) sons[0].interpret(varList))
+            sons[1].interpret(varList);
+        else
+            sons[2].interpret(varList);
+        return null;
+    }
 }
 
 class WhileNode extends ASTNode {
@@ -249,6 +324,13 @@ class WhileNode extends ASTNode {
     @Override
     public String toString() {
         return "<WhileNode> while";
+    }
+
+    @Override
+    public Object interpret(HashMap<String, Integer> varList) throws UnassignedVarException, DivideByZeroException {
+        while ((Boolean) sons[0].interpret(varList))
+            sons[1].interpret(varList);
+        return null;
     }
 }
 
@@ -263,18 +345,5 @@ class SequenceNode extends ASTNode {
     }
 }
 
-class StmtSeq extends ASTNode {
-    ArrayList<ASTNode> statements;
-
-    public StmtSeq() {
-        statements = new ArrayList<>();
-    }
-
-    public void add(ASTNode stmt) {
-        statements.add(stmt);
-    }
-}
-
 class BlockBegin extends ASTNode {
-
 }
