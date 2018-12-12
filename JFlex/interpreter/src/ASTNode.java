@@ -12,6 +12,9 @@ public class ASTNode implements Interpretable {
             this.sons = new ASTNode[nrSons];
     }
 
+    /**
+     * Build AST node with the given sons
+     */
     public ASTNode(ASTNode... sons) {
         this.sons = new ASTNode[sons.length];
 
@@ -29,6 +32,9 @@ public class ASTNode implements Interpretable {
         sons[index] = son;
     }
 
+    /**
+     * AST node abstract factory
+     */
     public static ASTNode buildNode(int line, String type, Stack<ASTNode> args) {
         switch (type) {
             case "+": {
@@ -74,7 +80,7 @@ public class ASTNode implements Interpretable {
     }
 
     /**
-     * default node interpreting function
+     * Default node interpreting function
      */
     public Object interpret(HashMap<String, Integer> varList) throws UnassignedVarException, DivideByZeroException {
         if (sons != null)
@@ -346,5 +352,8 @@ class SequenceNode extends ASTNode {
     }
 }
 
+/**
+ * Helper node used in blocks parsing (marks the beginning of a block in the nodes stack).
+ */
 class BlockBegin extends ASTNode {
 }

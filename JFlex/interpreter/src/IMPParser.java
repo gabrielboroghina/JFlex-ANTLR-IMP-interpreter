@@ -247,6 +247,10 @@ class IMPParser {
   private int zzFinalHighSurrogate = 0;
 
   /* user code: */
+
+  /**
+   * Pair between a token and its line in the source file
+   */
   private class TokenWithLine {
     String str;
     int line;
@@ -261,6 +265,10 @@ class IMPParser {
   private Stack<ASTNode> nodesStack;
   public AST syntaxTree;
 
+  /**
+   * Detects the type of the block ((if)then block, else block, while block or standalone block)
+   * and creates the right node into the nodes stack.
+   */
   private void pushBlockNode(BlockNode block) {
     if (!operatorStack.empty() && operatorStack.peek().str.equals("else")) {
       // this was an else block
@@ -281,6 +289,10 @@ class IMPParser {
     }
   }
 
+  /**
+   * Creates a new operator node together with its line in the source file and pushes it
+   * into the nodes stack.
+   */
   private void makeOperatorNode() {
     TokenWithLine op = operatorStack.pop();
     nodesStack.push(ASTNode.buildNode(op.line, op.str, nodesStack));
@@ -561,7 +573,7 @@ class IMPParser {
       boolean zzR = false;
       int zzCh;
       int zzCharCount;
-      for (zzCurrentPosL = zzStartRead;
+      for (zzCurrentPosL = zzStartRead  ;
            zzCurrentPosL < zzMarkedPosL ;
            zzCurrentPosL += zzCharCount ) {
         zzCh = Character.codePointAt(zzBufferL, zzCurrentPosL, zzMarkedPosL);
@@ -686,8 +698,8 @@ class IMPParser {
           case 22:
             break;
           case 3: {
-            while (!operatorStack.empty() &&
-                    (operatorStack.peek().str.equals("/") || operatorStack.peek().str.equals("+")))
+            while (!operatorStack.empty() && (operatorStack.peek().str.equals("/") ||
+                    operatorStack.peek().str.equals("+")))
               makeOperatorNode();
 
             operatorStack.push(new TokenWithLine("+", yyline + 1));
@@ -721,8 +733,8 @@ class IMPParser {
           case 26:
             break;
           case 7: {
-            while (!operatorStack.empty() &&
-                    (operatorStack.peek().str.equals("+") || operatorStack.peek().str.equals("/")))
+            while (!operatorStack.empty() && (operatorStack.peek().str.equals("+") ||
+                    operatorStack.peek().str.equals("/")))
               makeOperatorNode();
 
             operatorStack.push(new TokenWithLine(">", yyline + 1));
@@ -751,14 +763,14 @@ class IMPParser {
               makeOperatorNode();
 
             operatorStack.pop(); // delete '{' from the stack
-
             ASTNode blockContent = nodesStack.pop();
+
             // compress stmt nodes using Sequence Nodes
             while (!(nodesStack.peek() instanceof BlockBegin)) {
               ASTNode top = nodesStack.pop();
               blockContent = new SequenceNode(top, blockContent);
             }
-            nodesStack.pop(); // pop BlockBegin node
+            nodesStack.pop(); // pop the BlockBegin node
 
             pushBlockNode(new BlockNode(blockContent));
           }
@@ -772,17 +784,19 @@ class IMPParser {
           case 31:
             break;
           case 12: { // the end of the variables list or of an assignment
-            while (!operatorStack.empty() &&
-                    !operatorStack.peek().str.equals("int") && !operatorStack.peek().str.equals("="))
+            while (!operatorStack.empty() && !operatorStack.peek().str.equals("int") &&
+                    !operatorStack.peek().str.equals("="))
               makeOperatorNode();
 
             TokenWithLine op = operatorStack.pop();
             if (op.str.equals("int")) {
+              // insert the variables list into the main node
               syntaxTree.root = new MainNode();
 
               while (!nodesStack.empty())
                 syntaxTree.root.declareVar(((VarNode) nodesStack.pop()).name);
-            } else { // ;
+            } else { // ';'
+              // create the assignment node
               ASTNode assignmentNode = ASTNode.buildNode(op.line, "=", nodesStack);
               nodesStack.push(assignmentNode);
             }
@@ -813,7 +827,7 @@ class IMPParser {
           case 35:
             break;
           case 16: {
-            pushBlockNode(new BlockNode());
+            pushBlockNode(new BlockNode()); // create an empty block node
           }
           // fall through
           case 36:

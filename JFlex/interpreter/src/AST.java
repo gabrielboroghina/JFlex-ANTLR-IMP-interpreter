@@ -1,6 +1,9 @@
 public class AST {
     MainNode root;
 
+    /**
+     * Creates the string representation for an abstract syntax tree
+     */
     private void makeStringForTree(ASTNode node, StringBuilder stringBuilder, String indentation) {
         stringBuilder.append(indentation);
         stringBuilder.append(node);

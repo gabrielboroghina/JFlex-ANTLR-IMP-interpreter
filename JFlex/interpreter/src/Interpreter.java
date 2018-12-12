@@ -38,7 +38,7 @@ public class Interpreter {
     }
 
     /**
-     * Run interpreter on the AST
+     * Runs interpreter on the AST
      */
     private static void interpretProgram() throws UnassignedVarException, DivideByZeroException {
         // insert declared variables into the var table
