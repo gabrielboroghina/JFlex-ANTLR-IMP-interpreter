@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Stack;
+import java.util.*;
 
 public class ASTNode implements Interpretable {
     int line;
@@ -75,6 +73,9 @@ public class ASTNode implements Interpretable {
         return null;
     }
 
+    /**
+     * default node interpreting function
+     */
     public Object interpret(HashMap<String, Integer> varList) throws UnassignedVarException, DivideByZeroException {
         if (sons != null)
             for (ASTNode son : sons)

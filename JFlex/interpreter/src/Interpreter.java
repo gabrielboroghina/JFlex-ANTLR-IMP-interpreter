@@ -25,12 +25,27 @@ public class Interpreter {
     }
 
     /**
-     * run interpreter on the AST
+     * Depth first search for finding undeclared variables. Throws an UnassignedVarException
+     * when finding the first undeclared variable.
+     */
+    private static void checkUndeclaredVars(ASTNode node) throws UnassignedVarException {
+        if (node instanceof VarNode && !varTable.containsKey(((VarNode) node).name))
+            throw new UnassignedVarException(node.line);
+
+        if (node.sons != null)
+            for (ASTNode son : node.sons)
+                checkUndeclaredVars(son);
+    }
+
+    /**
+     * Run interpreter on the AST
      */
     private static void interpretProgram() throws UnassignedVarException, DivideByZeroException {
         // insert declared variables into the var table
         for (String varName : syntaxTree.root.varList)
             varTable.put(varName, null);
+
+        checkUndeclaredVars(syntaxTree.root);
 
         // start interpreting from the MainNode
         syntaxTree.root.interpret(varTable);

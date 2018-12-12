@@ -27,8 +27,8 @@ class IMPParser {
    *                  at the beginning of a line
    * l is of the form l = 2*k, k a non negative integer
    */
-  private static final int ZZ_LEXSTATE[] = {
-          0, 0
+  private static final int ZZ_LEXSTATE[] = { 
+     0, 0
   };
 
   /** 
@@ -284,7 +284,7 @@ class IMPParser {
   private void makeOperatorNode() {
     TokenWithLine op = operatorStack.pop();
     nodesStack.push(ASTNode.buildNode(op.line, op.str, nodesStack));
-  }
+    }
 
 
   /**
@@ -407,7 +407,7 @@ class IMPParser {
    */
   public final void yyreset(java.io.Reader reader) {
     zzReader = reader;
-    zzAtBOL = true;
+    zzAtBOL  = true;
     zzAtEOF  = false;
     zzEOFDone = false;
     zzEndRead = zzStartRead = 0;
@@ -562,7 +562,7 @@ class IMPParser {
       int zzCh;
       int zzCharCount;
       for (zzCurrentPosL = zzStartRead;
-           zzCurrentPosL < zzMarkedPosL;
+           zzCurrentPosL < zzMarkedPosL ;
            zzCurrentPosL += zzCharCount ) {
         zzCh = Character.codePointAt(zzBufferL, zzCurrentPosL, zzMarkedPosL);
         zzCharCount = Character.charCount(zzCh);
