@@ -27,21 +27,21 @@ integer : AVAL ;
 bool : BVAL ;
 var : VAR ;
 
-block : '{' '}' | '{' (block | assignment | ifStmt | whileStmt | sequenceNode) '}' ;
-assignment : var '=' (var | integer | plusNode | divNode | bracketAExpr) SEMICOLON ;
+block : '{' '}' | '{' (block | assignment | ifStmt | whileStmt | sequence) '}' ;
+assignment : var '=' (var | integer | plus | div | bracketAExpr) SEMICOLON ;
 ifStmt : 'if' bracketBExpr block 'else' block ;
 whileStmt : 'while' bracketBExpr block ;
-sequenceNode : (block | assignment | ifStmt | whileStmt) (block | assignment | ifStmt | whileStmt | sequenceNode);
+sequence : (block | assignment | ifStmt | whileStmt) (block | assignment | ifStmt | whileStmt | sequence);
 
 varList : var COMMA varList | var ;
-mainNode : INT varList SEMICOLON (block | assignment | ifStmt | whileStmt | sequenceNode) ;
+mainNode : INT varList SEMICOLON (block | assignment | ifStmt | whileStmt | sequence) ;
 
-plusNode : (var | integer | divNode | bracketAExpr) '+' (var | integer | plusNode | divNode | bracketAExpr) ;
-divNode : (var | integer | bracketAExpr) '/' (var | integer | divNode | bracketAExpr) ;
+plus : (var | integer | div | bracketAExpr) '+' (var | integer | plus | div | bracketAExpr) ;
+div : (var | integer | bracketAExpr) '/' (var | integer | div | bracketAExpr) ;
 
-bracketAExpr : '(' (var | integer | plusNode | divNode | bracketAExpr) ')' ;
+bracketAExpr : '(' (var | integer | plus | div | bracketAExpr) ')' ;
 bracketBExpr : '(' (BVAL | and | greater | not | bracketBExpr) ')' ;
 
 and : (bool | greater | not | bracketBExpr) '&&' (bool | and | greater | not | bracketBExpr);
-greater : (var | integer | plusNode | divNode | bracketAExpr) '>' (var | integer | plusNode | divNode | bracketAExpr) ;
+greater : (var | integer | plus | div | bracketAExpr) '>' (var | integer | plus | div | bracketAExpr) ;
 not : '!' (bool | and | greater | not | bracketBExpr) ;
