@@ -1,7 +1,7 @@
 grammar IMP;
 
 // Lexer rules
-AVAL : [1-9][0-9]* ;
+AVAL : [1-9][0-9]* | '0' ;
 BVAL : 'true'|'false' ;
 INT : 'int'  ;
 IF : 'if' ;
