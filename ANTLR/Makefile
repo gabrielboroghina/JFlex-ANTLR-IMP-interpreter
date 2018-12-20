@@ -1,8 +1,9 @@
 build:
 	java -jar antlr-4.7.1-complete.jar src/IMP.g4 -visitor
-	javac src/*.java
+	javac src/*.java -d .
 
-
+run:
+	java Main
 
 clean:
-	rm -f src/*.class src/*.tokens src/*.interp
+	rm -f *.class

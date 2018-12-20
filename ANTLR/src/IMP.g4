@@ -36,8 +36,8 @@ sequence : (block | assignment | ifStmt | whileStmt) (block | assignment | ifStm
 varList : var COMMA varList | var ;
 mainNode : INT varList SEMICOLON (block | assignment | ifStmt | whileStmt | sequence) ;
 
-plus : (var | integer | div | bracketAExpr) '+' (var | integer | plus | div | bracketAExpr) ;
-div : (var | integer | bracketAExpr) '/' (var | integer | div | bracketAExpr) ;
+plus : (var | integer | div | bracketAExpr) ('+' (var | integer | div | bracketAExpr))* ;
+div : (var | integer | bracketAExpr) ('/' (var | integer | div | bracketAExpr))* ;
 
 bracketAExpr : '(' (var | integer | plus | div | bracketAExpr) ')' ;
 bracketBExpr : '(' (BVAL | and | greater | not | bracketBExpr) ')' ;

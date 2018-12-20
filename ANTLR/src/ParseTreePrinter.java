@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.io.PrintWriter;
+import java.util.List;
 
 public class ParseTreePrinter implements IMPVisitor<Object> {
 
@@ -35,6 +36,13 @@ public class ParseTreePrinter implements IMPVisitor<Object> {
         return null;
     }
 
+    public void visitSons(List<ParseTree> list) {
+        indent.append('\t');
+        for (ParseTree node : list)
+            node.accept(this);
+        indent.deleteCharAt(indent.length() - 1);
+    }
+
     /**
      * Visit a parse tree produced by {@link IMPParser#integer}.
      *
@@ -42,9 +50,7 @@ public class ParseTreePrinter implements IMPVisitor<Object> {
      * @return the visitor result
      */
     public Object visitInteger(IMPParser.IntegerContext ctx) {
-        indent.append("\t");
-        writer.println(ctx.AVAL().getSymbol());
-        indent.deleteCharAt(indent.length() - 1);
+        writer.println(indent.toString() + "<IntNode> " + ctx.AVAL().getText());
         return null;
     }
 
@@ -55,6 +61,7 @@ public class ParseTreePrinter implements IMPVisitor<Object> {
      * @return the visitor result
      */
     public Object visitBool(IMPParser.BoolContext ctx) {
+        writer.println(indent.toString() + "<BoolNode> " + ctx.BVAL().getText());
         return null;
     }
 
@@ -65,6 +72,7 @@ public class ParseTreePrinter implements IMPVisitor<Object> {
      * @return the visitor result
      */
     public Object visitVar(IMPParser.VarContext ctx) {
+        writer.println(indent.toString() + "<VariableNode> " + ctx.getText());
         return null;
     }
 
@@ -75,6 +83,8 @@ public class ParseTreePrinter implements IMPVisitor<Object> {
      * @return the visitor result
      */
     public Object visitBlock(IMPParser.BlockContext ctx) {
+        writer.println(indent.toString() + "<BlockNode> {}");
+        visitSons(ctx.children);
         return null;
     }
 
@@ -85,6 +95,8 @@ public class ParseTreePrinter implements IMPVisitor<Object> {
      * @return the visitor result
      */
     public Object visitAssignment(IMPParser.AssignmentContext ctx) {
+        writer.println(indent.toString() + "<AssignmentNode> =");
+        visitSons(ctx.children);
         return null;
     }
 
@@ -95,6 +107,8 @@ public class ParseTreePrinter implements IMPVisitor<Object> {
      * @return the visitor result
      */
     public Object visitIfStmt(IMPParser.IfStmtContext ctx) {
+        writer.println(indent.toString() + "<IfNode> if");
+        visitSons(ctx.children);
         return null;
     }
 
@@ -105,6 +119,8 @@ public class ParseTreePrinter implements IMPVisitor<Object> {
      * @return the visitor result
      */
     public Object visitWhileStmt(IMPParser.WhileStmtContext ctx) {
+        writer.println(indent.toString() + "<WhileNode> while");
+        visitSons(ctx.children);
         return null;
     }
 
@@ -115,7 +131,8 @@ public class ParseTreePrinter implements IMPVisitor<Object> {
      * @return the visitor result
      */
     public Object visitSequence(IMPParser.SequenceContext ctx) {
-        writer.println("<SequenceNode>");
+        writer.println(indent.toString() + "<SequenceNode>");
+        visitSons(ctx.children);
         return null;
     }
 
@@ -137,7 +154,7 @@ public class ParseTreePrinter implements IMPVisitor<Object> {
      */
     public Object visitMainNode(IMPParser.MainNodeContext ctx) {
         writer.println("<MainNode>");
-        ctx.getChild(3).accept(this);
+        visitSons(ctx.children);
         return null;
     }
 
@@ -148,6 +165,8 @@ public class ParseTreePrinter implements IMPVisitor<Object> {
      * @return the visitor result
      */
     public Object visitPlus(IMPParser.PlusContext ctx) {
+        writer.println(indent.toString() + "<PlusNode> +");
+        visitSons(ctx.children);
         return null;
     }
 
@@ -158,6 +177,8 @@ public class ParseTreePrinter implements IMPVisitor<Object> {
      * @return the visitor result
      */
     public Object visitDiv(IMPParser.DivContext ctx) {
+        writer.println(indent.toString() + "<DivNode> /");
+        visitSons(ctx.children);
         return null;
     }
 
@@ -168,6 +189,8 @@ public class ParseTreePrinter implements IMPVisitor<Object> {
      * @return the visitor result
      */
     public Object visitBracketAExpr(IMPParser.BracketAExprContext ctx) {
+        writer.println(indent.toString() + "<BracketNode> ()");
+        visitSons(ctx.children);
         return null;
     }
 
@@ -178,6 +201,8 @@ public class ParseTreePrinter implements IMPVisitor<Object> {
      * @return the visitor result
      */
     public Object visitBracketBExpr(IMPParser.BracketBExprContext ctx) {
+        writer.println(indent.toString() + "<BracketNode> ()");
+        visitSons(ctx.children);
         return null;
     }
 
@@ -188,6 +213,8 @@ public class ParseTreePrinter implements IMPVisitor<Object> {
      * @return the visitor result
      */
     public Object visitAnd(IMPParser.AndContext ctx) {
+        writer.println(indent.toString() + "<AndNode> &&");
+        visitSons(ctx.children);
         return null;
     }
 
@@ -198,6 +225,8 @@ public class ParseTreePrinter implements IMPVisitor<Object> {
      * @return the visitor result
      */
     public Object visitGreater(IMPParser.GreaterContext ctx) {
+        writer.println(indent.toString() + "<GreaterNode> >");
+        visitSons(ctx.children);
         return null;
     }
 
@@ -208,6 +237,8 @@ public class ParseTreePrinter implements IMPVisitor<Object> {
      * @return the visitor result
      */
     public Object visitNot(IMPParser.NotContext ctx) {
+        writer.println(indent.toString() + "<NotNode> !");
+        visitSons(ctx.children);
         return null;
     }
 }
