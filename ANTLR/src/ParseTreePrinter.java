@@ -147,6 +147,16 @@ public class ParseTreePrinter implements IMPVisitor<Object> {
     }
 
     /**
+     * Visit a parse tree produced by {@link IMPParser#varDecl}.
+     *
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    public Object visitVarDecl(IMPParser.VarDeclContext ctx) {
+        return null;
+    }
+
+    /**
      * Visit a parse tree produced by {@link IMPParser#mainNode}.
      *
      * @param ctx the parse tree
