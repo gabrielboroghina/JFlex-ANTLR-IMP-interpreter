@@ -1,0 +1,50 @@
+Gabriel Boroghina
+Grupa 333 CB
+
+                               ANTLR IMP parser
+
+    Fisierul IMP.g4 reprezinta gramatica IMP folosita de ANTLR pentru a genera
+parserul si contine atat regulile de lexing, cat si cele de parsing.
+
+Descriere reguli de parsare
+
+    In cadrul regulilor de parsare, au fost folosite tipurile de noduri din AST
+definite in enunt, astfel incat ANTLR sa construiasca direct arborele de parsare
+in forma definita in enunt (exceptand terminalii, care apar si ei in arborele
+generat).
+
+    O expresie aritmetica (AExpr) poate fi o variabila (var), un numar (integer),
+o adunare sau impartire intre 2 expresii aritmetice (plus, respectiv div) sau
+o parantezare ce contine tot o expresie aritmetica (bracketAExpr).
+
+    O expresie booleana (BExpr) poate fi o valoare booleana (bool), un "si logic"
+intre 2 expresii booleene (and), o comparatie de tip greater intre 2 expresii
+aritmetice (greater), o operatie unara not aplicata unei expresii booleene sau
+o parantezare ce contine o expresie booleana (bracketBExpr).
+
+    Pentru definirea corecta a expresiilor aritmetice si booleene, s-au introdus
+2 tipuri de noduri bracket: unul care accepta numai expresii aritmetice in
+interior (bracketAExpr), si unul care accepta numai expresii booleene in interior
+(bracketBExpr).
+
+    Deoarece secventele (sequence) de instructiuni (Stmt) se asociaza la dreapta,
+un sequence poate fi format din ceva ce nu este sequence in partea stanga
+(block, assignment, if sau while) si ceva ce poate fi si sequence in partea
+dreapta (block, assignment, if, while sau alt sequence).
+
+    Operatorii +, / si && se asociaza la stanga, prin urmare, regulile acestora
+au fost impartite in 2 (pentru a fi acceptate de ANTLR): o alternativa care este
+left-recursive (ex: un plusNode este format dintr-un alt plusNode in stanga si
+ceva ce nu poate fi plusNode in dreapta) si o alternativa care defineste cazul
+de baza (ex: care nici in partea stanga, nici in dreapta nu contine alt plusNode).
+
+    Celelalte noduri sunt definite in regulile de parsare corespunzatoare ca in
+enunt.
+
+-------------------------------------------------------------------------------
+
+    Pentru printarea arborelui sintactic, am folosit un Visitor (ParseTreePrinter)
+ce implementeaza interfata IMPVisitor generata de ANTLR. Pentru fiecare tip de
+nod din arbore, functia de visit corespunzatoare va printa nodul, iar apoi va
+trimite visitor-ul catre toti fii sai (daca exista) prin intermediul functiei
+visitSons.
