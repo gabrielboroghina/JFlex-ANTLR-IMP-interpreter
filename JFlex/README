@@ -1,0 +1,54 @@
+Gabriel Boroghina
+Grupa 333 CB
+
+                              JFlex IMP interpreter
+
+    Fisierul JFlex parser.flex este folosit pentru generarea unui parser pentru
+limbajul IMP. Acesta defineste pentru fiecare tip de token al limbajului un
+bloc de instructiuni care sa fie executate la intalnirea token-ului respectiv
+in cadrul fisierului sursa. Prin aceste instructiuni are loc constructia
+Abstract Syntax Tree-ului pentru fisierul sursa.
+
+    Parsarea are la baza algoritmul Shunting-yard, ce foloseste 2 stive: una
+pentru operatori si una pentru operanzi (care in cazul nostru vor fi noduri
+in AST). In functie de tipul token-ului, se fac anumite actualizari asupra
+celor 2 stive:
+
+    * AVal, BVal, Var, {} - se introduce direct in stiva de noduri un nod
+corespunzator (IntNode, BoolNode, VarNode, respectiv BlockNode).
+
+    * +, /, &&, !, > - se extrag din varful stivei de operatori toti operatorii
+care au prioritate mai mare sau egala (egala deoarece sunt left-associative)
+cu cea a operatorului determinat de token-ul curent si se construiesc nodurile
+corespunzatoare acestor operatori in stiva de noduri (elementele din varful
+stivei de noduri reprezinta operanzii pentru acesti operatori), iar apoi se
+insereaza un element in stiva de operatori pentru token-ul curent.
+
+    * if, else, while, int - se introduc in stiva de operatori.
+Acesta va fi extras la detectarea token-ului de final corespunzator (";" pentru
+int, respectiv "}" pentru else si while; if este extras la acelasi pas cu
+extragerea lui else).
+
+    * (, { - se introduc in stiva de operatori, urmand sa fie extrase la gasirea
+token-ului final omolog: ), respectiv }.
+
+    * = - se introduce in stiva de operatori; va fi extras la gasirea primului
+token ";".
+
+    * ; - marcheaza finalul unei declarari de variabile (la inceputul programului),
+daca operatorul din varful stivei era "int", sau al unui assignment, daca
+operatorul din varful stivei era "=". Se face pop la stiva de operatori si se
+construieste nodul corespunzator in stiva de noduri.
+
+-------------------------------------------------------------------------------
+
+    Interpretarea programului este facuta prin intermediul clasei Interpreter,
+folosind un DFS pe AST-ul generat de catre parserul IMPParser.
+    Fiecare nod din arborele sintactic implementeaza metoda interpret, prin
+intermediul careia se realizeaza interpretarea subarborelui determinat de acel
+nod. Metoda poate arunca exceptii de tipul UnassignedVarException sau
+DivideByZeroException, caz in care exceptia este propagata pana in clasa
+Interpreter, unde este prinsa si afisata in fisierul de output.
+    Daca nu apar erori, dupa interpretarea programului se afiseaza lista de
+variabile. AST-ul este afisat printr-un dept-first search implementat prin
+suprascrierea metodei toString pentru fiecare tip de nod din arborele sintactic.

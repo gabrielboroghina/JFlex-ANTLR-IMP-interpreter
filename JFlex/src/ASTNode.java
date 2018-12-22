@@ -23,6 +23,9 @@ public class ASTNode implements Interpretable {
             this.sons[nr++] = son;
     }
 
+    /**
+     * Build AST node with its line in the source file and the given sons
+     */
     public ASTNode(int line, ASTNode... sons) {
         this(sons);
         this.line = line;
@@ -80,7 +83,7 @@ public class ASTNode implements Interpretable {
     }
 
     /**
-     * Default node interpreting function
+     * Default node interpreting (visitor) function
      */
     public Object interpret(HashMap<String, Integer> varList) throws UnassignedVarException, DivideByZeroException {
         if (sons != null)
@@ -92,7 +95,7 @@ public class ASTNode implements Interpretable {
 
 class MainNode extends ASTNode {
     /**
-     * the ordered variables list
+     * the ordered variables list (declared at the beginning of the program)
      */
     ArrayList<String> varList;
 
@@ -167,7 +170,7 @@ class VarNode extends ASTNode {
         if (varList.containsKey(name) && varList.get(name) != null)
             return varList.get(name);
 
-        throw new UnassignedVarException(line);
+        throw new UnassignedVarException(line); // undeclared or uninitialized variable
     }
 }
 
@@ -183,6 +186,7 @@ class PlusNode extends ASTNode {
 
     @Override
     public Object interpret(HashMap<String, Integer> varList) throws UnassignedVarException, DivideByZeroException {
+        // compute the sum of the sons
         return (Integer) sons[0].interpret(varList) + (Integer) sons[1].interpret(varList);
     }
 }
@@ -203,6 +207,7 @@ class DivNode extends ASTNode {
         if (right == 0)
             throw new DivideByZeroException(line);
 
+        // compute the integer division of the sons
         return (Integer) sons[0].interpret(varList) / right;
     }
 }
@@ -235,6 +240,7 @@ class AndNode extends ASTNode {
 
     @Override
     public Object interpret(HashMap<String, Integer> varList) throws UnassignedVarException, DivideByZeroException {
+        // compute boolean AND between the sons
         return (Boolean) sons[0].interpret(varList) && (Boolean) sons[1].interpret(varList);
     }
 }
@@ -283,6 +289,7 @@ class AssignmentNode extends ASTNode {
 
     @Override
     public Object interpret(HashMap<String, Integer> varList) throws UnassignedVarException, DivideByZeroException {
+        // update the variable's value in the var list
         varList.put(((VarNode) sons[0]).name, (Integer) sons[1].interpret(varList));
         return null;
     }
@@ -316,9 +323,9 @@ class IfNode extends ASTNode {
     @Override
     public Object interpret(HashMap<String, Integer> varList) throws UnassignedVarException, DivideByZeroException {
         if ((Boolean) sons[0].interpret(varList))
-            sons[1].interpret(varList);
+            sons[1].interpret(varList); // interpret <then> block
         else
-            sons[2].interpret(varList);
+            sons[2].interpret(varList); // interpret <else> block
         return null;
     }
 }
@@ -336,7 +343,7 @@ class WhileNode extends ASTNode {
     @Override
     public Object interpret(HashMap<String, Integer> varList) throws UnassignedVarException, DivideByZeroException {
         while ((Boolean) sons[0].interpret(varList))
-            sons[1].interpret(varList);
+            sons[1].interpret(varList); // interpret the body of the <while> instruction
         return null;
     }
 }

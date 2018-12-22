@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 public class Interpreter {
     private static AST syntaxTree;
+
     /**
      * Hash table containing the mappings between a variable name and its value
      */
@@ -68,8 +69,9 @@ public class Interpreter {
 
         IMPParser parser = new IMPParser(fileReader);
         try {
-            parser.yylex();
+            parser.yylex(); // parse the source file
         } catch (IOException e) {
+            e.printStackTrace();
         }
 
         syntaxTree = parser.syntaxTree;
@@ -88,6 +90,7 @@ public class Interpreter {
             interpretProgram();
             printVariablesValues(writer);
         } catch (UnassignedVarException | DivideByZeroException e) {
+            // an exception had occurred; print only the exception's message
             writer.println(e.getMessage());
         } finally {
             writer.close();

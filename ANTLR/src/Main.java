@@ -14,6 +14,8 @@ public class Main {
         }
 
         ParseTreePrinter parseTreePrinter = new ParseTreePrinter(writer);
+
+        // launch the parse tree printer visitor
         parser.mainNode().accept(parseTreePrinter);
 
         writer.close();

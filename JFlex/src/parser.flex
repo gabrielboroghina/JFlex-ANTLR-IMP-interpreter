@@ -20,31 +20,31 @@ import java.util.*;
         }
     }
 
-    private Stack<TokenWithLine> operatorStack;
-    private Stack<ASTNode> nodesStack;
+    private Stack<TokenWithLine> operators;
+    private Stack<ASTNode> nodes;
     public AST syntaxTree;
 
     /**
      * Detects the type of the block ((if)then block, else block, while block or standalone block)
-     * and creates the right node into the nodes stack.
+     * and creates the corresponding node into the nodes stack.
      */
     private void pushBlockNode(BlockNode block) {
-        if (!operatorStack.empty() && operatorStack.peek().str.equals("else")) {
+        if (!operators.empty() && operators.peek().str.equals("else")) {
             // this was an else block
             // build the if node
-            operatorStack.pop(); // pop else
-            TokenWithLine token = operatorStack.pop(); // pop if
-            nodesStack.push(block);
-            nodesStack.push(ASTNode.buildNode(token.line, "if", nodesStack));
-        } else if (!operatorStack.empty() && operatorStack.peek().str.equals("while")) {
+            operators.pop(); // pop else
+            TokenWithLine token = operators.pop(); // pop if
+            nodes.push(block);
+            nodes.push(ASTNode.buildNode(token.line, "if", nodes));
+        } else if (!operators.empty() && operators.peek().str.equals("while")) {
             // this was a (while) do block
             // build the while node
-            TokenWithLine token = operatorStack.pop(); // pop while
-            nodesStack.push(block);
-            nodesStack.push(ASTNode.buildNode(token.line, "while", nodesStack));
+            TokenWithLine token = operators.pop(); // pop while
+            nodes.push(block);
+            nodes.push(ASTNode.buildNode(token.line, "while", nodes));
         } else {
             // simple block node
-            nodesStack.push(block);
+            nodes.push(block);
         }
     }
 
@@ -53,27 +53,27 @@ import java.util.*;
      * into the nodes stack.
      */
     private void makeOperatorNode() {
-        TokenWithLine op = operatorStack.pop();
-        nodesStack.push(ASTNode.buildNode(op.line, op.str, nodesStack));
+        TokenWithLine op = operators.pop();
+        nodes.push(ASTNode.buildNode(op.line, op.str, nodes));
     }
 %}
 
 %init{
-    operatorStack = new Stack<>();
-    nodesStack = new Stack<>();
+    operators = new Stack<>();
+    nodes = new Stack<>();
     syntaxTree = new AST();
 %init}
 
 %eof{
     // compress stmt nodes using Sequence Nodes
-    while (nodesStack.size() > 1) {
-        ASTNode top = nodesStack.pop();
-        ASTNode top2 = nodesStack.pop();
+    while (nodes.size() > 1) {
+        ASTNode top = nodes.pop();
+        ASTNode top2 = nodes.pop();
 
-        nodesStack.push(new SequenceNode(top2, top));
+        nodes.push(new SequenceNode(top2, top));
     }
 
-    syntaxTree.root.setSon(0, nodesStack.peek());
+    syntaxTree.root.setSon(0, nodes.peek());
 %eof}
 
 AVal = [1-9][0-9]*|0
@@ -82,128 +82,127 @@ Var = [a-z]+
 
 %%
 
-{BVal} { nodesStack.push(new BoolNode(yyline + 1, Boolean.parseBoolean(yytext()))); }
+{BVal} { nodes.push(new BoolNode(yyline + 1, Boolean.parseBoolean(yytext()))); }
 
-if { operatorStack.push(new TokenWithLine("if", yyline + 1)); }
+if { operators.push(new TokenWithLine("if", yyline + 1)); }
 
-while { operatorStack.push(new TokenWithLine("while", yyline + 1)); }
+while { operators.push(new TokenWithLine("while", yyline + 1)); }
 
-else { operatorStack.push(new TokenWithLine("else", yyline + 1)); }
+else { operators.push(new TokenWithLine("else", yyline + 1)); }
 
 int
 {
     // the beginning of the variables list
-    operatorStack.push(new TokenWithLine("int", yyline + 1));
+    operators.push(new TokenWithLine("int", yyline + 1));
 }
 
-{Var} { nodesStack.push(new VarNode(yyline + 1, yytext())); }
+{Var} { nodes.push(new VarNode(yyline + 1, yytext())); }
 
-{AVal} { nodesStack.push(new IntNode(yyline + 1, Integer.parseInt(yytext()))); }
+{AVal} { nodes.push(new IntNode(yyline + 1, Integer.parseInt(yytext()))); }
 
 \+
 {
-    while (!operatorStack.empty() && (operatorStack.peek().str.equals("/") ||
-                                      operatorStack.peek().str.equals("+")))
+    // pop all operators with greater or equal priority
+    while (!operators.empty() && (operators.peek().str.equals("/") || operators.peek().str.equals("+")))
         makeOperatorNode();
     
-    operatorStack.push(new TokenWithLine("+", yyline + 1));
+    operators.push(new TokenWithLine("+", yyline + 1));
 }
 
 \/
 {
-    while (!operatorStack.empty() && operatorStack.peek().str.equals("/"))
+    while (!operators.empty() && operators.peek().str.equals("/"))
         makeOperatorNode();
         
-    operatorStack.push(new TokenWithLine("/", yyline + 1));
+    operators.push(new TokenWithLine("/", yyline + 1));
 }
 
-\( { operatorStack.push(new TokenWithLine("(", yyline + 1)); }
+\( { operators.push(new TokenWithLine("(", yyline + 1)); }
 
 \)
 {
-    while (!operatorStack.empty() && !operatorStack.peek().str.equals("("))
+    while (!operators.empty() && !operators.peek().str.equals("("))
         makeOperatorNode();
 
-    operatorStack.pop(); // pop the opening bracket '('
-    nodesStack.push(new BracketNode(nodesStack.pop()));
+    operators.pop(); // pop the opening bracket '('
+    nodes.push(new BracketNode(nodes.pop()));
 }
 
 &&
 {
-    while (!operatorStack.empty() && (operatorStack.peek().str.equals("!") ||
-                                      operatorStack.peek().str.equals("&&") ||
-                                      operatorStack.peek().str.equals(">")))
+    // the && operator has the smallest priority between &&, ! and >
+    while (!operators.empty() && (operators.peek().str.equals("!") ||
+                                  operators.peek().str.equals("&&") ||
+                                  operators.peek().str.equals(">")))
         makeOperatorNode();
 
-    operatorStack.push(new TokenWithLine("&&", yyline + 1));
+    operators.push(new TokenWithLine("&&", yyline + 1));
 }
 
 >
 {
-    while (!operatorStack.empty() && (operatorStack.peek().str.equals("+") ||
-                                      operatorStack.peek().str.equals("/")))
+    while (!operators.empty() && (operators.peek().str.equals("+") || operators.peek().str.equals("/")))
         makeOperatorNode();
 
-    operatorStack.push(new TokenWithLine(">", yyline + 1));
+    operators.push(new TokenWithLine(">", yyline + 1));
 }
 
 \!
 {
-    while (!operatorStack.empty() && operatorStack.peek().str.equals(">"))
+    while (!operators.empty() && operators.peek().str.equals(">"))
         makeOperatorNode();
 
-    operatorStack.push(new TokenWithLine("!", yyline + 1));
+    operators.push(new TokenWithLine("!", yyline + 1));
 }
 
-\{\}
+\{\s*\}
 {
     pushBlockNode(new BlockNode()); // create an empty block node
 }
 
 \{
 {
-    operatorStack.push(new TokenWithLine("{", yyline + 1));
-    nodesStack.push(new BlockBegin()); // mark the beginning of a block
+    operators.push(new TokenWithLine("{", yyline + 1));
+    nodes.push(new BlockBegin()); // mark the beginning of a block in the nodes stack
 }
 
 \}
 {
-    while (!operatorStack.empty() && !operatorStack.peek().str.equals("{"))
+    while (!operators.empty() && !operators.peek().str.equals("{"))
         makeOperatorNode();
 
-    operatorStack.pop(); // delete '{' from the stack
-    ASTNode blockContent = nodesStack.pop();
+    operators.pop(); // delete '{' from the stack
+    ASTNode blockContent = nodes.pop();
 
     // compress stmt nodes using Sequence Nodes
-    while (!(nodesStack.peek() instanceof BlockBegin)) {
-        ASTNode top = nodesStack.pop();
+    while (!(nodes.peek() instanceof BlockBegin)) {
+        ASTNode top = nodes.pop();
         blockContent = new SequenceNode(top, blockContent);
     }
-    nodesStack.pop(); // pop the BlockBegin node
+    nodes.pop(); // pop the BlockBegin node
 
     pushBlockNode(new BlockNode(blockContent));
 }
 
-= { operatorStack.push(new TokenWithLine("=", yyline + 1)); }
+= { operators.push(new TokenWithLine("=", yyline + 1)); }
 
 ;
 {
     // the end of the variables list or of an assignment
-    while (!operatorStack.empty() && !operatorStack.peek().str.equals("int") &&
-                                     !operatorStack.peek().str.equals("="))
+    while (!operators.empty() && !operators.peek().str.equals("int") && !operators.peek().str.equals("="))
         makeOperatorNode();
 
-    TokenWithLine op = operatorStack.pop();
+    TokenWithLine op = operators.pop();
     if (op.str.equals("int")) {
         // insert the variables list into the main node
         syntaxTree.root = new MainNode();
 
-        while (!nodesStack.empty())
-            syntaxTree.root.declareVar(((VarNode) nodesStack.pop()).name);
+        while (!nodes.empty())
+            syntaxTree.root.declareVar(((VarNode) nodes.pop()).name);
     } else { // ';'
         // create the assignment node
-        ASTNode assignmentNode = ASTNode.buildNode(op.line, "=", nodesStack);
-        nodesStack.push(assignmentNode);
+        ASTNode assignmentNode = ASTNode.buildNode(op.line, "=", nodes);
+        nodes.push(assignmentNode);
     }
 }
 

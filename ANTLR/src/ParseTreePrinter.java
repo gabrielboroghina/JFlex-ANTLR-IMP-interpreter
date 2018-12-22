@@ -7,9 +7,8 @@ import java.io.PrintWriter;
 import java.util.List;
 
 public class ParseTreePrinter implements IMPVisitor<Object> {
-
     private PrintWriter writer;
-    private StringBuilder indent;
+    private StringBuilder indent; // tabs to indent the AST nodes
 
     public ParseTreePrinter(PrintWriter writer) {
         this.writer = writer;
@@ -37,10 +36,12 @@ public class ParseTreePrinter implements IMPVisitor<Object> {
     }
 
     public void visitSons(List<ParseTree> list) {
-        indent.append('\t');
+        indent.append('\t'); // increase the indentation level
+
         for (ParseTree node : list)
             node.accept(this);
-        indent.deleteCharAt(indent.length() - 1);
+
+        indent.deleteCharAt(indent.length() - 1); // decrease the indentation level
     }
 
     /**
