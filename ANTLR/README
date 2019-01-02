@@ -48,3 +48,13 @@ ce implementeaza interfata IMPVisitor generata de ANTLR. Pentru fiecare tip de
 nod din arbore, functia de visit corespunzatoare va printa nodul, iar apoi va
 trimite visitor-ul catre toti fii sai (daca exista) prin intermediul functiei
 visitSons.
+
+-------------------------------------------------------------------------------
+
+Testare:
+    build: make build - genereaza fisierele .class in directorul curent. Se
+foloseste jar-ul de ANTLR inclus in arhiva.
+
+    run: make run - ruleaza clasa Main din directorul curent
+
+    clean: sterge fisierele .class

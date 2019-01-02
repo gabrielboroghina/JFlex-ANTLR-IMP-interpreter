@@ -6,4 +6,4 @@ run:
 	java Main
 
 clean:
-	rm -f *.class
+	rm -f *.class src/IMP*.interp src/IMP*.tokens src/IMP*.java
