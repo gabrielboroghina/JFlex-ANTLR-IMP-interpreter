@@ -1728,17 +1728,17 @@ public class IMPParser extends Parser {
 		public BoolContext bool() {
 			return getRuleContext(BoolContext.class,0);
 		}
+		public BracketBExprContext bracketBExpr() {
+			return getRuleContext(BracketBExprContext.class,0);
+		}
+		public NotContext not() {
+			return getRuleContext(NotContext.class,0);
+		}
 		public AndContext and() {
 			return getRuleContext(AndContext.class,0);
 		}
 		public GreaterContext greater() {
 			return getRuleContext(GreaterContext.class,0);
-		}
-		public NotContext not() {
-			return getRuleContext(NotContext.class,0);
-		}
-		public BracketBExprContext bracketBExpr() {
-			return getRuleContext(BracketBExprContext.class,0);
 		}
 		public NotContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1779,25 +1779,25 @@ public class IMPParser extends Parser {
 			case 2:
 				{
 				setState(224);
-				and(0);
+				bracketBExpr();
 				}
 				break;
 			case 3:
 				{
 				setState(225);
-				greater();
+				not();
 				}
 				break;
 			case 4:
 				{
 				setState(226);
-				not();
+				and(0);
 				}
 				break;
 			case 5:
 				{
 				setState(227);
-				bracketBExpr();
+				greater();
 				}
 				break;
 			}
@@ -1927,8 +1927,8 @@ public class IMPParser extends Parser {
 		"\30\r\2\u00dc\u00df\5\32\16\2\u00dd\u00df\5\34\17\2\u00de\u00d9\3\2\2"+
 		"\2\u00de\u00da\3\2\2\2\u00de\u00db\3\2\2\2\u00de\u00dc\3\2\2\2\u00de\u00dd"+
 		"\3\2\2\2\u00df#\3\2\2\2\u00e0\u00e6\7\22\2\2\u00e1\u00e7\5\4\3\2\u00e2"+
-		"\u00e7\5 \21\2\u00e3\u00e7\5\"\22\2\u00e4\u00e7\5$\23\2\u00e5\u00e7\5"+
-		"\36\20\2\u00e6\u00e1\3\2\2\2\u00e6\u00e2\3\2\2\2\u00e6\u00e3\3\2\2\2\u00e6"+
+		"\u00e7\5\36\20\2\u00e3\u00e7\5$\23\2\u00e4\u00e7\5 \21\2\u00e5\u00e7\5"+
+		"\"\22\2\u00e6\u00e1\3\2\2\2\u00e6\u00e2\3\2\2\2\u00e6\u00e3\3\2\2\2\u00e6"+
 		"\u00e4\3\2\2\2\u00e6\u00e5\3\2\2\2\u00e7%\3\2\2\2\32\648ASZamt{\u0083"+
 		"\u0087\u008e\u0094\u009b\u009f\u00a8\u00b2\u00bb\u00c2\u00ca\u00ce\u00d6"+
 		"\u00de\u00e6";

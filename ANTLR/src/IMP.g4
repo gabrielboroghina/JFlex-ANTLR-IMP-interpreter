@@ -48,4 +48,4 @@ and : and '&&' (bool | greater | not | bracketBExpr) // left-assocative operator
 
 greater : (var | integer | plus | div | bracketAExpr) '>' (var | integer | plus | div | bracketAExpr) ; // AExpr > AExpr
 
-not : '!' (bool | and | greater | not | bracketBExpr) ; // ! BExpr
+not : '!' (bool | bracketBExpr | not | and | greater) ; // ! BExpr

@@ -3,8 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="198623ca-e544-409b-8b79-f735bd36133e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../ANTLR/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ANTLR/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ANTLR/README" beforeDir="false" afterPath="$PROJECT_DIR$/../ANTLR/README" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/IMPParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/IMPParser.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -73,19 +74,22 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="Makefile" value="1" />
-          <entry key="README" value="2" />
+          <entry key="README" value="3" />
+          <entry key="arbore" value="3" />
           <entry key="flex" value="2" />
           <entry key="iml" value="5" />
-          <entry key="java" value="12" />
+          <entry key="input" value="2" />
+          <entry key="java" value="13" />
+          <entry key="output" value="1" />
           <entry key="xml" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="IDEA_MODULE" value="5" />
-          <entry key="JAVA" value="12" />
+          <entry key="JAVA" value="13" />
           <entry key="JFlex" value="2" />
-          <entry key="PLAIN_TEXT" value="3" />
+          <entry key="PLAIN_TEXT" value="10" />
           <entry key="XML" value="6" />
         </counts>
       </usages-collector>
@@ -93,6 +97,7 @@
         <counts>
           <entry key="README" value="3906" />
           <entry key="flex" value="189" />
+          <entry key="input" value="121" />
           <entry key="java" value="698" />
           <entry key="txt" value="89" />
         </counts>
@@ -101,46 +106,57 @@
         <counts>
           <entry key="JAVA" value="701" />
           <entry key="JFlex" value="186" />
-          <entry key="PLAIN_TEXT" value="3995" />
+          <entry key="PLAIN_TEXT" value="4116" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="6" />
-          <entry key="project.open.time.0" value="2" />
-          <entry key="project.open.time.12" value="1" />
+          <entry key="project.closed" value="10" />
+          <entry key="project.open.time.0" value="4" />
+          <entry key="project.open.time.1" value="1" />
+          <entry key="project.open.time.12" value="2" />
           <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="5" />
+          <entry key="project.opened" value="9" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/README">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="26" column="63" lean-forward="true" selection-start-line="26" selection-start-column="63" selection-end-line="26" selection-end-column="63" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ASTNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3213">
+            <state relative-caret-position="559">
               <caret line="213" selection-start-line="213" selection-end-line="213" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/IMPParser.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="8398">
+              <caret line="504" selection-start-line="504" selection-end-line="504" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/output">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/arbore">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/parser.flex">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2329">
-              <caret line="137" selection-start-line="137" selection-end-line="137" />
+            <state relative-caret-position="2567">
+              <caret line="151" column="13" selection-start-line="151" selection-start-column="13" selection-end-line="151" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -149,16 +165,16 @@
         <entry file="file://$PROJECT_DIR$/src/Interpretable.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="136">
-              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+              <caret line="8" selection-start-line="8" selection-end-line="8" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Interpreter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1632">
-              <caret line="96" column="9" lean-forward="true" selection-start-line="96" selection-start-column="9" selection-end-line="96" selection-end-column="9" />
+            <state relative-caret-position="476">
+              <caret line="71" selection-start-line="71" selection-end-line="71" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -217,9 +233,6 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/README" root0="SKIP_HIGHLIGHTING" />
-  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
@@ -230,7 +243,6 @@
         <option value="$PROJECT_DIR$/src/IMPParser.java" />
         <option value="$PROJECT_DIR$/src/DivideByZeroException.java" />
         <option value="$PROJECT_DIR$/src/UnassignedVarException.java" />
-        <option value="$PROJECT_DIR$/input" />
         <option value="$PROJECT_DIR$/src/AST.java" />
         <option value="$PROJECT_DIR$/JFlex.iml" />
         <option value="$PROJECT_DIR$/.idea/modules.xml" />
@@ -239,6 +251,8 @@
         <option value="$PROJECT_DIR$/src/ASTNode.java" />
         <option value="$PROJECT_DIR$/src/parser.flex" />
         <option value="$PROJECT_DIR$/README" />
+        <option value="$PROJECT_DIR$/out/input" />
+        <option value="$PROJECT_DIR$/input" />
       </list>
     </option>
   </component>
@@ -254,6 +268,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -270,8 +286,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -284,6 +298,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/.idea" />
     </key>
   </component>
@@ -342,6 +357,10 @@
       <workItem from="1545419207912" duration="435000" />
       <workItem from="1545467269605" duration="4893000" />
       <workItem from="1545475070948" duration="31000" />
+      <workItem from="1545480455488" duration="339000" />
+      <workItem from="1545944211162" duration="9000" />
+      <workItem from="1546433256473" duration="1170000" />
+      <workItem from="1546435367106" duration="234000" />
     </task>
     <task id="LOCAL-00001" summary="Implemented AST structure + started introducing actions for flex rules">
       <created>1544355657299</created>
@@ -403,13 +422,13 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="83242000" />
+    <option name="totallyTimeSpent" value="84994000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="27" width="1922" height="1054" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.146875" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.146875" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="UI Designer" order="3" />
@@ -417,7 +436,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32938644" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32670158" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.3972013" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39685863" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -450,6 +469,18 @@
     <MESSAGE value="JFlex - Added comments + README" />
     <option name="LAST_COMMIT_MESSAGE" value="JFlex - Added comments + README" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Interpreter.java</url>
+          <line>32</line>
+          <properties />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand>
@@ -493,9 +524,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/input" />
-    <entry file="file://$PROJECT_DIR$/output" />
-    <entry file="file://$PROJECT_DIR$/arbore" />
     <entry file="file://$PROJECT_DIR$/.idea/.idea/workspace.xml" />
     <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
       <provider selected="true" editor-type-id="text-editor" />
@@ -545,48 +573,58 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/IMPParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3343">
-          <caret line="816" selection-start-line="816" selection-end-line="816" />
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/README" />
+    <entry file="file://$PROJECT_DIR$/src/README">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ASTNode.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3213">
+        <state relative-caret-position="559">
           <caret line="213" selection-start-line="213" selection-end-line="213" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/IMPParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8398">
+          <caret line="504" selection-start-line="504" selection-end-line="504" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/parser.flex">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2329">
-          <caret line="137" selection-start-line="137" selection-end-line="137" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Interpreter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1632">
-          <caret line="96" column="9" lean-forward="true" selection-start-line="96" selection-start-column="9" selection-end-line="96" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="2567">
+          <caret line="151" column="13" selection-start-line="151" selection-start-column="13" selection-end-line="151" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Interpretable.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README">
+    <entry file="file://$PROJECT_DIR$/arbore">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/output">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/input">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="26" column="63" lean-forward="true" selection-start-line="26" selection-start-column="63" selection-end-line="26" selection-end-column="63" />
+        <state relative-caret-position="85">
+          <caret line="5" column="5" selection-start-line="5" selection-start-column="5" selection-end-line="5" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Interpreter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="71" selection-start-line="71" selection-end-line="71" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
